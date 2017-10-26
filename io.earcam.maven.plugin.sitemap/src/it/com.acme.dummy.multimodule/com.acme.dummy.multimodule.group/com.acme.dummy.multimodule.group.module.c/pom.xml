@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>com.acme.dummy</groupId>
 		<artifactId>com.acme.dummy.multimodule.group</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${version.this.plugin}</version>
 	</parent>
 
 	<artifactId>com.acme.dummy.multimodule.group.module.c</artifactId>

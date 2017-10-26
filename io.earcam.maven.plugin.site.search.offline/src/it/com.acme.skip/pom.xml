@@ -75,7 +75,7 @@
 			<plugin>
 				<groupId>io.earcam.maven.plugin</groupId>
 				<artifactId>io.earcam.maven.plugin.site.search.offline</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>${version.this.plugin}</version>
 				<executions>
 					<execution>
 						<id>copy-ui-script</id>

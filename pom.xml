@@ -363,6 +363,9 @@
 								<!-- allows the test builds to fail, but still runs the verify.groovy 
 									script???? -->
 								<ignoreFailures>true</ignoreFailures>
+								<properties>
+									<version.this.plugin>${project.version}</version.this.plugin>
+								</properties>
 							</configuration>
 						</execution>
 					</executions>

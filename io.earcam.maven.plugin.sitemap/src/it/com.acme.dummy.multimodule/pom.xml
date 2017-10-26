@@ -22,7 +22,7 @@
 
 	<groupId>com.acme</groupId>
 	<artifactId>com.acme.dummy.multimodule</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${version.this.plugin}</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -70,7 +70,7 @@
 			<plugin>
 				<groupId>io.earcam.maven.plugin</groupId>
 				<artifactId>io.earcam.maven.plugin.sitemap</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>${version.this.plugin}</version>
 				<configuration>
 					<gzip>true</gzip>
 					<include>^.*\.html$</include>

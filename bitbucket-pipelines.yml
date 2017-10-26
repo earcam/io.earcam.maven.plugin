@@ -12,4 +12,4 @@ pipelines:
         script:
           - wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.toolchain/src/main/resources/toolchain/continuous-integration-hotspot-linux-debian-amd64.xml -O  ${HOME}/.m2/toolchains.xml
           - wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.configuration/src/main/resources/settings.xml -O ${HOME}/ci-settings.xml 
-          - mvn -s ${HOME}/ci-settings.xml -P '!strict' -B verify
+          - mvn  -s ${HOME}/ci-settings.xml  -ff  -q  -B  -P '!strict'  -Dinvoker.skip=true  verify

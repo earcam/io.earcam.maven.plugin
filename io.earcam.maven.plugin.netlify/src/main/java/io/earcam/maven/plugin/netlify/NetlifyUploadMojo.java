@@ -106,8 +106,13 @@ public class NetlifyUploadMojo extends AbstractMojo {
 	}
 
 
+	/**
+	 * @deprecated unused
+	 * @return {@code null}
+	 */
+	@Deprecated
 	public MavenProject getProject()
 	{
-		return project;
+		return null;
 	}
 }

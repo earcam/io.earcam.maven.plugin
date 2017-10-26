@@ -37,4 +37,5 @@ before_script:
 script:
 - mvn --settings $HOME/ci-settings.xml -U -P analyse,report,sonar
 - mvn --settings $HOME/ci-settings.xml -U -P analyse,report,site
+- mvn --settings $HOME/ci-settings.xml org.eluder.coveralls:coveralls-maven-plugin:report
 after_success: bash <(curl -s https://codecov.io/bash)

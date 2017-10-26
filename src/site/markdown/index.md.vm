@@ -110,6 +110,7 @@
 	<li><a class="externalLink" href="https://bitbucket.org/${coordinate}" title="BitBucket Pipelines CI"><img src="https://bitbucket-badges.atlassian.io/badge/${coordinate}.svg" alt="BitBucket Pipelines CI" /></a></li>
 
 	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${project.groupId}%3A${project.artifactId}" title="SonarQube Quality Gate"><img src="https://sonarcloud.io/api/badges/gate?key=${project.groupId}%3A${project.artifactId}" alt="Sonar Quality Gate" /></a></li>
+	<li><a href='https://coveralls.io/github/${coordinate}?branch=master'><img src='https://coveralls.io/repos/github/${coordinate}/badge.svg?branch=master' alt='Coverage Status' /></a></li>
 	<li><a class="externalLink" href="https://codecov.io/github/${coordinate}?branch=master" title="CodeCov"><img src="https://codecov.io/github/${coordinate}/coverage.svg?branch=master" alt="CodeCov" /></a></li>
 
 	<!--

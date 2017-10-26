@@ -59,8 +59,8 @@
 		<skip.execution.pitest>true</skip.execution.pitest>
 		<version.slf4j>1.7.25</version.slf4j>
 
-		<version.utilitarian>0.0.1-SNAPSHOT</version.utilitarian>
-		<version.unexceptional>0.3.0-SNAPSHOT</version.unexceptional>
+		<version.utilitarian>0.0.1</version.utilitarian>
+		<version.unexceptional>0.3.0</version.unexceptional>
 	</properties>
 
 	<dependencyManagement>

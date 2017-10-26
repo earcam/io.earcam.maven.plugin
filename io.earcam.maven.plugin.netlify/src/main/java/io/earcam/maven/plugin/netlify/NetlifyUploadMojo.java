@@ -110,9 +110,12 @@ public class NetlifyUploadMojo extends AbstractMojo {
 	 * @deprecated unused
 	 * @return {@code null}
 	 */
+	// Scheduled for delete on next major release, revapi seems overzealous
+	// in applying semver rules to projects versioned less than 1.0.0
+	@SuppressWarnings("squid:S1133")
 	@Deprecated
 	public MavenProject getProject()
 	{
-		return null;
+		throw new UnsupportedOperationException("deprecated; never used");
 	}
 }

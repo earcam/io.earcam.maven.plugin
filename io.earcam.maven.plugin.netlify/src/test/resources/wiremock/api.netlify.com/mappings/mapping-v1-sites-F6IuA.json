@@ -1,0 +1,29 @@
+{
+  "id" : "d8d2182e-5c55-305e-9565-10021d5cf0fd",
+  "request" : {
+    "url" : "/api/v1/sites",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v1-sites-F6IuA.json",
+    "headers" : {
+      "Cache-Control" : "max-age=0, private, must-revalidate",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Date" : "Fri, 29 Sep 2017 16:52:25 GMT",
+      "X-Request-Id" : "42a5ead6-74e9-45d8-b88a-1c94839d2c61",
+      "X-Ratelimit-Limit" : "500",
+      "X-Ratelimit-Reset" : "2017-09-29 16:53:25 UTC",
+      "Link" : "<https://api.netlify.com/api/v1/sites?page=1>; rel=last",
+      "X-Runtime" : "0.247012",
+      "Etag" : "W/\"196663349c9017a5bfcaf4b79a5e8f8a\"",
+      "X-Frame-Options" : "ALLOWALL",
+      "X-Ratelimit-Remaining" : "499",
+      "Age" : "5",
+      "Transfer-Encoding" : "chunked",
+      "Connection" : "keep-alive",
+      "Server" : "Netlify"
+    }
+  },
+  "uuid" : "d8d2182e-5c55-305e-9565-10021d5cf0fd"
+}

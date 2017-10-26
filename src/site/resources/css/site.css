@@ -1,0 +1,74 @@
+
+
+/*
+Fix for solarized light bg colour
+*/
+
+div.source pre {
+	background-color: #fdf6e3;
+}
+
+/*
+Bug fix for drop-down menu on mobile devices - see https://github.com/andriusvelykis/reflow-maven-skin/issues/41#issuecomment-141996185
+*/
+.dropdown-backdrop {
+    position: static;
+}
+
+
+
+.color-highlight {
+	color: #F57900;
+}
+
+
+
+
+span.ecute, span.eye, span.aye {
+  color:#F57900;
+  position:relative;
+  vertical-align: bottom !important;
+}
+
+span.ecute:after {
+  content:'e';
+  position:absolute;
+  left:0;
+  overflow:hidden;
+  z-index:1;
+  color:black;
+  vertical-align: bottom !important;
+}
+
+span.eye:after {
+  content:'ı';
+  position:absolute;
+  left:0;
+  overflow:hidden;
+  z-index:1;
+  color:black;
+  vertical-align: bottom !important;
+}
+
+
+/*
+body {
+	background-image:url(../images/bg.png);
+}
+*/
+
+.thumbnail-row {
+	margin-top: 10px;
+}
+
+/*h1, */h2 {
+  margin-top: 30px;
+}
+
+h3, h4, h5, h6 {
+  margin-top: 20px;
+}
+
+.carousel-caption a {
+  color: white;
+}

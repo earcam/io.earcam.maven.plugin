@@ -1,0 +1,36 @@
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+#set($h5 = '#####')
+
+${h3} Features
+
+* Create sitemaps (and sitemap indices) for your maven generated site 
+* Submit sitemaps to any engine (run independently as a  post site-deploy goal)
+* Fully compliant with the [sitemaps.org][sitemaps-org] specification (XML format)
+* Scales well for large sites (streams everything, accumulates only listings of generated files (held per module, then cached to filesystem)) 
+
+<!--
+argh!   TODO
+	* Create permissive [`robots.txt`][robotstxt-org] linking to the sitemap
+-->
+
+${h3} Scenarios
+
+${h4} Single module project
+
+0. Generates a `sitemap.xml` file, or if the contents exceeds the maximums (50mb in uncompressed size or 50k entries), then it is split into multiple files
+0. Where multiple `sitemap.xml` files are generated, then a `sitemapindex.xml` file is also generated
+0. Should the `sitemapindex.xml` file exceed the same maximums it is also split
+
+${h4} Multi-module projects
+
+Per module the process is the same as for a single module project.  The exception is the root project, which performs the following:
+
+0. Generates a `sitemap.xml` file, or if the contents exceeds the maximums (50mb in uncompressed size or 50k entries), then it is split into multiple files
+0. Generates a `sitemapindex.xml` file for all known `sitemap.xml` files in self and child modules  
+0. Should the `sitemapindex.xml` file exceed the same maximums it is also split
+
+
+[sitemaps-org]: https://www.sitemaps.org
+[robotstxt-org]: http://www.robotstxt.org/

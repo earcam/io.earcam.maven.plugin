@@ -1,0 +1,29 @@
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+#set($h5 = '#####')
+
+Offline search (lunrjs index, autocomplete list and url-title-map) for static sites.
+
+
+${h3} Features
+
+* Configurable and extensible (though underlying API currently quite rough around the edges); pluggable crawler steps, tokenizer and even indexer.
+* Works for multi-module projects (those that correctly use the &lt;distributionManagement&gt; pom section)
+* Generates an autocomplete list
+* Generates a url-title-map (allowing presentation of the title in search results)
+* Includes a copy UI search script (should work with maven skins; [reflow][skin-reflow], [MSB3][skin-msb3] and [io.earcam.maven.site.skin][skin-earcam] - requires bootstrap and jquery) 
+* Process HTML and PDFs
+* By default Javadoc and Xref generated content are minimally indexed to preserve index quality and minimize JSON size 
+   
+
+${h3} Limitations
+
+0. Does not support "snippet" highlighting - have experimented here, but performance issues ensue - future work to do this dynamically and lazily planned
+0. Does not handle building multiple search indices from projects containing multiple independent sites - the index will be generated in the root project declaring a reporting directory.
+0. Does not (yet) handle file formats other than HTML and PDF, although extensible with custom code 
+
+
+[skin-reflow]: http://andriusvelykis.github.io/reflow-maven-skin/
+[skin-msb3]: http://tunguski.github.io/msb3-maven-skin/
+[skin-earcam]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.earcam.maven%22%20AND%20a%3A%22io.earcam.maven.site.skin%22

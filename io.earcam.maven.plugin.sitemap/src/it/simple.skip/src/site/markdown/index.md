@@ -1,0 +1,3 @@
+# IT simple site - Index
+
+blah hlab, lorem ipsum...

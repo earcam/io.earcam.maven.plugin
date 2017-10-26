@@ -1,0 +1,34 @@
+{
+  "id" : "94592343-ed4f-3007-b379-ebc149f3afb0",
+  "request" : {
+    "url" : "/api/v1/sites",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"name\":\"earcam-test-mutli\",\"custom_domain\":\"def.earcam.io\",\"force_ssl\":false,\"ssl\":false,\"managed_dns\":false}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 201,
+    "bodyFileName" : "body-v1-sites-JLYqa.json",
+    "headers" : {
+      "Cache-Control" : "max-age=0, private, must-revalidate",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Date" : "Fri, 29 Sep 2017 16:53:34 GMT",
+      "X-Request-Id" : "1b5b17e2-8f80-49bc-8a56-1b5fa97ae7d0",
+      "X-Ratelimit-Limit" : "500",
+      "X-Ratelimit-Reset" : "2017-09-29 16:54:34 UTC",
+      "Location" : "https://api.netlify.com/api/v1/sites/1d7bd08f-2fcf-4a0c-a67e-282ce893fc44",
+      "X-Runtime" : "0.128004",
+      "Etag" : "W/\"5c93072c80f2a59c0f9371fc0a5eab1d\"",
+      "X-Frame-Options" : "ALLOWALL",
+      "X-Ratelimit-Remaining" : "496",
+      "Age" : "7",
+      "Transfer-Encoding" : "chunked",
+      "Connection" : "keep-alive",
+      "Server" : "Netlify"
+    }
+  },
+  "uuid" : "94592343-ed4f-3007-b379-ebc149f3afb0"
+}

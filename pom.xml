@@ -1,0 +1,480 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.earcam.maven</groupId>
+		<artifactId>io.earcam.maven.pom</artifactId>
+		<version>2.1.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>io.earcam.maven.plugin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<description>A disparate assortment of maven plugins</description>
+	<url>${site.url}${earcam.project.name.short}</url>
+	<inceptionYear>2017</inceptionYear>
+
+	<modules>
+		<!-- <module>io.earcam.maven.plugin.ramdisk</module> -->
+		<module>io.earcam.maven.plugin.netlify</module>
+		<module>io.earcam.maven.plugin.sitemap</module>
+		<module>io.earcam.maven.plugin.site.search.offline</module>
+	</modules>
+
+	<scm>
+		<connection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</connection>
+		<developerConnection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</developerConnection>
+		<url>http://bitbucket.org/${coordinate.username.project}.git</url>
+		<tag>HEAD</tag>
+	</scm>
+	<issueManagement>
+		<system>BitBucket</system>
+		<url>https://bitbucket.org/${coordinate.username.project}/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/${coordinate.username.project}</url>
+	</ciManagement>
+	<distributionManagement>
+		<site>
+			<id>netlify</id>
+			<url>${site.url}${earcam.project.name.short}/</url>
+		</site>
+	</distributionManagement>
+
+	<properties>
+		<version.java.platform>8</version.java.platform>
+		<version.java>1.${version.java.platform}</version.java>
+		<maven.compiler.source>${version.java}</maven.compiler.source>
+		<maven.compiler.target>${version.java}</maven.compiler.target>
+
+		<site.url>https://plugin.maven.earcam.io/</site.url>
+
+		<earcam.project.root.artifactId>io.earcam.maven.plugin</earcam.project.root.artifactId>
+		<coordinate.username.project>earcam/${earcam.project.root.artifactId}</coordinate.username.project>
+		<earcam.project.name.short></earcam.project.name.short>
+
+		<skip.execution.pitest>true</skip.execution.pitest>
+		<version.slf4j>1.7.25</version.slf4j>
+
+		<version.utilitarian>0.0.1-SNAPSHOT</version.utilitarian>
+		<version.unexceptional>0.3.0-SNAPSHOT</version.unexceptional>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.earcam.utilitarian</groupId>
+				<artifactId>io.earcam.utilitarian.io</artifactId>
+				<version>${version.utilitarian}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.earcam</groupId>
+				<artifactId>io.earcam.unexceptional</artifactId>
+				<version>${version.unexceptional}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+				<optional>true</optional>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${version.slf4j}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${version.slf4j}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-plugin-api</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven.plugin-tools</groupId>
+				<artifactId>maven-plugin-annotations</artifactId>
+				<version>3.5</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-utils</artifactId>
+				<version>3.0.24</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-core</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven.plugin-testing</groupId>
+				<artifactId>maven-plugin-testing-harness</artifactId>
+				<version>3.3.0</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>java-hamcrest</artifactId>
+				<version>2.0.0.0</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>2.11.0</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<inherited>true</inherited>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-toolchains-plugin</artifactId>
+										<versionRange>[1.1,2)</versionRange>
+										<goals>
+											<goal>toolchain</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.plexus</groupId>
+										<artifactId>plexus-component-metadata</artifactId>
+										<versionRange>[1.7.1,2)</versionRange>
+										<goals>
+											<goal>generate-metadata</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-invoker-plugin</artifactId>
+										<versionRange>[1.7,2)</versionRange>
+										<goals>
+											<goal>install</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-toolchains-plugin</artifactId>
+					<version>1.1</version>
+					<configuration>
+						<toolchains>
+							<jdk>
+								<version>${maven.compiler.target}</version>
+								<vendor>oracle</vendor>
+							</jdk>
+						</toolchains>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>toolchain</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.7.0</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+						<compilerArgument>-Xlint:all</compilerArgument>
+						<compilerArgument>-proc:none</compilerArgument>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.20</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.surefire</groupId>
+							<artifactId>surefire-junit4</artifactId>
+							<version>2.20</version>
+						</dependency>
+					</dependencies>
+					<executions>
+						<execution>
+							<goals>
+								<goal>test</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<parallel>false</parallel>
+						<testFailureIgnore>false</testFailureIgnore>
+						<includes>
+							<include>**/*Test.java</include>
+						</includes>
+						<excludes>
+							<exclude>**/*IntegrationTest.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.plexus</groupId>
+					<artifactId>plexus-component-metadata</artifactId>
+					<version>1.7.1</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>generate-metadata</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>3.5</version>
+					<executions>
+						<execution>
+							<id>mojo-descriptor</id>
+							<goals>
+								<goal>descriptor</goal>
+							</goals>
+							<configuration>
+								<goalPrefix>${earcam.project.name.short}</goalPrefix>
+							</configuration>
+						</execution>
+						<execution>
+							<id>help-goal</id>
+							<goals>
+								<goal>helpmojo</goal>
+							</goals>
+							<configuration>
+								<goalPrefix>${earcam.project.name.short}</goalPrefix>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-docck-plugin</artifactId>
+					<version>1.1</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-invoker-plugin</artifactId>
+					<version>1.7</version>
+					<executions>
+						<execution>
+							<id>integration-test</id>
+							<goals>
+								<goal>install</goal>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<debug>true</debug>
+								<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+								<pomIncludes>
+									<pomInclude>*/pom.xml</pomInclude>
+								</pomIncludes>
+								<postBuildHookScript>verify</postBuildHookScript>
+								<localRepositoryPath>${project.build.directory}/local-repository</localRepositoryPath>
+								<settingsFile>src/it/settings.xml</settingsFile>
+								<mavenOpts>${failsafe.argLine}</mavenOpts>
+								<!-- configuration.goals are not merged, so don't define defaults 
+									here -->
+
+								<!-- allows the test builds to fail, but still runs the verify.groovy 
+									script???? -->
+								<ignoreFailures>true</ignoreFailures>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.5</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<profiles>
+		<profile>
+			<id>post-site</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			
+			<build>
+				<defaultGoal>validate</defaultGoal>
+
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.6.0</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>generate-search-json</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<executable>java</executable>
+									<arguments>
+										<argument>-jar</argument>
+										<argument>${settings.localRepository}/io/earcam/utilitarian/io.earcam.utilitarian.site.search.offline/${version.utilitarian}/io.earcam.utilitarian.site.search.offline-${version.utilitarian}-uber.jar</argument>
+									
+										<argument>${project.reporting.outputDirectory}</argument>
+		
+										<argument>${project.reporting.outputDirectory}@/</argument>
+										<argument>${project.basedir}/io.earcam.maven.plugin.netlify/target/site/@/netlify/</argument>
+										<argument>${project.basedir}/io.earcam.maven.plugin.site.search.offline/target/site/@/site/search/offline/</argument>
+										<argument>${project.basedir}/io.earcam.maven.plugin.sitemap/target/site/@/sitemap/</argument>
+									</arguments>
+									<successCodes>
+										<successCode>0</successCode>
+									</successCodes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>3.0.2</version>
+						<executions>
+							<execution>
+								<id>copy-ui-script</id>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<artifact>io.earcam.utilitarian:io.earcam.utilitarian.site.search.offline:${version.utilitarian}</artifact>
+									<outputDirectory>${project.build.directory}/unpacked</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+          					
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<inherited>false</inherited>
+						<executions>
+							<execution>
+								<id>copy-ui-script</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<target>
+										<copy todir="${project.reporting.outputDirectory}/js/">
+											<fileset dir="${project.build.directory}/unpacked/META-INF/resources/js/" includes="ui.search.lunr.js" />
+										</copy>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>		
+			</build>
+		</profile>	
+	</profiles>
+</project>

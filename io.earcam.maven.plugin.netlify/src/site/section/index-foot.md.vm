@@ -1,0 +1,14 @@
+
+[Netlify][netlify] is a company offering great services (IMO) for static-site hosting.
+
+Of particular interest to maven users wanting their open-source projects' websites:
+
+* Generous free tier; including HTTPS (easily with letsencrypt) and custom domains 
+* Build integration; automation for web-facing SCMs, providing a build farm
+
+The authors of this maven plugin are in no way affiliated with Netlify or any parent/partner organisation,
+however we have enjoyed, and continue to make use of, the free service.  This plugin and related code exists
+simply to make life easier (selfish til shared).
+
+
+[netlify]: https://netlify.com

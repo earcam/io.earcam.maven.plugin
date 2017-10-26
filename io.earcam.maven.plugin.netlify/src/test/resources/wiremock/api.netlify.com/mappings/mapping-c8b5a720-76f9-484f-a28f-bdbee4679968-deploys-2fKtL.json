@@ -1,0 +1,28 @@
+{
+  "id" : "a7cd7d01-ce13-3645-b601-9d30de371ef9",
+  "request" : {
+    "url" : "/api/v1/sites/c8b5a720-76f9-484f-a28f-bdbee4679968/deploys",
+    "method" : "POST",
+    "bodyPatterns" : []
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-c8b5a720-76f9-484f-a28f-bdbee4679968-deploys-2fKtL.json",
+    "headers" : {
+      "Cache-Control" : "max-age=0, private, must-revalidate",
+      "Content-Type" : "application/json; charset=utf-8",
+      "Date" : "Fri, 29 Sep 2017 16:52:41 GMT",
+      "X-Request-Id" : "7a90269e-9e24-49c1-b9a9-356c6334a2dd",
+      "X-Ratelimit-Limit" : "500",
+      "X-Ratelimit-Reset" : "2017-09-29 16:53:41 UTC",
+      "X-Runtime" : "0.045475",
+      "Etag" : "W/\"73764ba69455cd4bdd570f89493540f8\"",
+      "X-Frame-Options" : "ALLOWALL",
+      "X-Ratelimit-Remaining" : "495",
+      "Age" : "5",
+      "Connection" : "keep-alive",
+      "Server" : "Netlify"
+    }
+  },
+  "uuid" : "a7cd7d01-ce13-3645-b601-9d30de371ef9"
+}

@@ -1,0 +1,36 @@
+package com.acme.api;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.management.remote.rmi.RMIConnection;
+
+@ParametersAreNonnullByDefault
+public class Dto implements Serializable, Comparable<Dto> {
+
+	private static final long serialVersionUID = -282669617726131737L;
+
+	public static RMIConnection eh()
+	{
+		return null;
+	}
+	
+	@Override
+	public int compareTo(Dto o)
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return Objects.equals(obj, this);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(this);
+	}
+}

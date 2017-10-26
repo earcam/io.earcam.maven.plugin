@@ -1,0 +1,39 @@
+---
+#
+# Not a huge fan of YAML, just use https://www.json2yaml.com/  and  https://www.json2yaml.com/convert-yaml-to-json
+#
+# This CI build is rather 'busy' ATM;  
+#   Running mvn site just to create Jacoco XML reports for codecov.io
+#   Running mvn analyse profile for sonarcloud.io
+#
+language: java
+jdk: oraclejdk8
+sudo: false
+cache:
+  directories:
+  - "$HOME/.m2"
+  - "$HOME/apache-maven-3.5.0"
+  - ""
+addons:
+  apt:
+    packages:
+    - graphviz
+    - oracle-java8-installer
+  sonarcloud:
+    organization: "earcam-github"
+    token:
+      secure: "TaEE8m/D70T/0TLx1+bqYAo8NhOO6+7pS8ejSBIBZnKGCycv96uEv+UJe5lsBVjNAeII4DZq7cu2U4rzeZsoCF9hE6i7blkUKL7gOeDP9HtS1txQkx5X1yGabJn/4D56vJccKJm0+w3LNKZraES0kMuRfPKgUzoCUl+QoQTMA+uFUDmYIapZjuZd+SJR7HsaiJZlLDkwQivR7QYep9gt9zdEOV5943yGk5jeTS2isVvOZqLEFAUA/CbQfBUeyxKeU+s1POk8QKgsu1h0fcydCS2J54J+urskT7mRWFbbiFD1RwLPer0F/n/44slZVDlnE+9ZdxZA1HWAfdN1BMPoyqC31Qo+yFJ2AQlhpDVCqquIIMEeIjbsTuxSB/+ZclxVONqVCbjtYOQG2DdmuTt6+Sk9+Z8Y02YfCdvbPxPBo8pGfMTdxuLQ+kEmqhm5y3eKsrB3uoV0vyyKQy/uVuOPhQkbtbhm8i7ZM8JdEC/obF4fUlBJMm3fDlXowLkCHtZ4fdtnU73cOS4ue+nEtlhQTZYPgX4Qz271s1ThVChILz5kOTPp8bnU07Ysu093bR2kckUpcgn3sxw/87pqN3GzIjBha5QOH+QjKF1du2vKkZRBc5xqxeV7whGakQ2YKvPh1Kq+Iug37URyY95K3jO72VHLPlcMTlqsS2ekCcssDLA="    
+before_install:
+- mkdir -p $HOME/.m2
+- export M2_HOME=$HOME/apache-maven-3.5.0
+- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz | tar zxf - -C $HOME; fi
+- export PATH=$M2_HOME/bin:$PATH
+install:
+- chmod go-rwx -R $HOME/.m2
+before_script:
+- wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.toolchain/src/main/resources/toolchain/continuous-integration-hotspot-linux-debian-amd64.xml -O  ~/.m2/toolchains.xml
+- wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.configuration/src/main/resources/settings.xml -O $HOME/ci-settings.xml 
+- mvn -v
+script:
+- mvn --settings $HOME/ci-settings.xml -U -P analyse,report,sonar
+after_success: bash <(curl -s https://codecov.io/bash)

@@ -1,3 +1,7 @@
+
+<b>NOTE: THE CI BUILDS ARE CURRENTLY EXPERIENCING ISSUES - TEST COVERAGE IS NOT BEING REPORTED CORRECTLY</b>
+
+
 Not using M<span class="aye">a</span>ven? Don't despair, the underlying functionality of each plugin can be found in modules of the [io.earcam.utilitarian][utilitarian] project.
 
 Note: currently the few available plugins are all maven site specific; so sweeping statements like "disparate assortment" and "veritable ménagerie" aren't accurate. 

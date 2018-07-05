@@ -36,8 +36,7 @@ try {
 	assert content.contains("<loc>http://example.com/distribution-management.html</loc>");
 	assert content.contains("<loc>http://example.com/dependency-info.html</loc>");
 	assert content.contains("<loc>http://example.com/index.html</loc>");
-	assert content.contains("<loc>http://example.com/dependency-convergence.html</loc>");
-	assert content.contains("<loc>http://example.com/project-summary.html</loc>");
+	assert content.contains("<loc>http://example.com/summary.html</loc>");
 	assert content.contains("<loc>http://example.com/project-info.html</loc>");
 	assert content.contains("<loc>http://example.com/dependencies.html</loc>");
 

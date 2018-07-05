@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Mojo for generating sitemap indices
  */
-@Mojo(name = "index", requiresProject = true, threadSafe = true, inheritByDefault = false, defaultPhase = SITE)
+@Mojo(name = "index", requiresProject = true, threadSafe = true, inheritByDefault = false, aggregator = true, defaultPhase = SITE)
 public class SitemapIndexMojo extends AbstractSitemapMojo {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SitemapIndexMojo.class);

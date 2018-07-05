@@ -55,7 +55,7 @@ public class SitemapSubmissionMojo extends AbstractMojo {
 	protected File targetDir;
 
 	/**
-	 * Sitemap submission hosts.  The host URI must include the protocol but no path, e.g. https://google.com
+	 * Sitemap submission hosts. The host URI must include the protocol but no path, e.g. https://google.com
 	 */
 	@Parameter(property = "sitemap.submit.hosts", defaultValue = "https://google.com,https://bing.com,https://yahoo.com", readonly = true, required = true)
 	private List<String> hosts;

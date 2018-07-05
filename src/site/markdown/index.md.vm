@@ -16,6 +16,7 @@
 
 
 *##set( $coordinate = $context.get( 'coordinate.username.project' ) )#*
+*##set( $sonarCoordinate = "io.earcam.maven%3A" + $context.get( 'earcam.project.root.artifactId' ) )#*
 
 *##set( $indexHeadFile = "$project.basedir/src/site/section/index-head.md.vm" )#*
 *##set( $indexFootFile = "$project.basedir/src/site/section/index-foot.md.vm" )#*
@@ -77,16 +78,16 @@
 
 <ul class="nav nav-list">
 	<li class="nav-header">Quick Links</li>
+	<li><a href="https://bitbucket.org/${coordinate}/issues/new" title="Report Issue or Request Feature"><img src="https://img.shields.io/badge/Raise%20Issue%2FFeature%20-%E2%86%91-41c4f4.svg" alt="Raise Issue/Feature"></img></a></li>
 #if($hasModules)##
-	<li><a href="./modules.html" title="Modules list">Modules List</a></li>
+	<li><a href="./modules.html" title="Modules list"><img src="https://img.shields.io/badge/Module_List-%E2%98%B0-41c4f4.svg" alt="Module List"></img></a></li>
 #else#*
 	*##if($isPlugin)##
-	<li><a href="./plugin-info.html" title="Details of plugin usage, goals, configuration, etc">Plugin Goals &amp; Configuration</a></li>
+	<li><a href="./plugin-info.html" title="Details of plugin usage, goals, configuration, etc"><img src="https://img.shields.io/badge/Plugin_Goals-%E2%9A%BD-41c4f4.svg" alt="Plugin Goals &amp; Configuration"></img></a></li>
 #*	*##else##
-	<li><a href="./dependency-info.html" title="Add Maven, Gradle, Ivy, SBT or download binary JAR">Include Dependency</a></li>
+	<li><a href="./dependency-info.html" title="Add Maven, Gradle, Ivy, SBT or download binary JAR"><img src="https://img.shields.io/badge/Include_Dependency-%E2%86%93-41c4f4.svg" alt="Include Dependency"></img></a></li>
 #*	*##end##
 #end##
-	<li><a href="https://bitbucket.org/${coordinate}/issues/new" title="Report an issue or request feature">Raise Issue / Request Feature</a></li>
 </ul>
 
 <br/>
@@ -95,6 +96,7 @@
 <ul class="nav nav-list">
 	<li class="nav-header">Resource</li>
 	<li><a class="externalLink" href="https://maven-badges.herokuapp.com/maven-central/${project.groupId}/${project.artifactId}" title="Maven Central"><img src="https://maven-badges.herokuapp.com/maven-central/${project.groupId}/${project.artifactId}/badge.svg" alt="Maven Central" /></a></li>
+	<li><a class="externalLink" href="https://repository.sonatype.org/#nexus-search;gav~${project.groupId}~${project.artifactId}" title="Sonatype OSS Snapshot"><img src="https://img.shields.io/nexus/s/https/oss.sonatype.org/${project.groupId}/${project.artifactId}.svg" alt="Maven Snapshot" /></a></li>
 #if( !$hasModules )##
 	<li><a class="externalLink" href="http://www.javadoc.io/doc/${project.groupId}/${project.artifactId}" title="JavaDoc"><img src="https://www.javadoc.io/badge/${project.groupId}/${project.artifactId}.svg?color=green" alt="JavaDoc" /></a></li>
 #else##
@@ -108,14 +110,12 @@
 	<li class="nav-header">Status</li>
 	<li><a class="externalLink" href="https://travis-ci.org/${coordinate}" title="Travis CI"><img src="https://travis-ci.org/${coordinate}.svg?branch=master" alt="Travis CI" /></a></li>
 	<li><a class="externalLink" href="https://bitbucket.org/${coordinate}" title="BitBucket Pipelines CI"><img src="https://bitbucket-badges.atlassian.io/badge/${coordinate}.svg" alt="BitBucket Pipelines CI" /></a></li>
-
-	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${project.groupId}%3A${project.artifactId}" title="SonarQube Quality Gate"><img src="https://sonarcloud.io/api/badges/gate?key=${project.groupId}%3A${project.artifactId}" alt="Sonar Quality Gate" /></a></li>
+	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${sonarCoordinate}" title="SonarQube Quality Gate"><img src="https://sonarcloud.io/api/project_badges/measure?project=${sonarCoordinate}&amp;metric=alert_status" alt="Sonar Quality Gate" /></a></li>
+	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${sonarCoordinate}" title="SonarQube Reliability"><img src="https://sonarcloud.io/api/project_badges/measure?project=${sonarCoordinate}&amp;metric=reliability_rating" alt="Sonar Reliability Rating" /></a></li>
+	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${sonarCoordinate}" title="SonarQube Security"><img src="https://sonarcloud.io/api/project_badges/measure?project=${sonarCoordinate}&amp;metric=security_rating" alt="Sonar Security Rating" /></a></li>
+	<li><a class="externalLink" href="https://sonarcloud.io/dashboard?id=${sonarCoordinate}" title="SonarQube Maintainability"><img src="https://sonarcloud.io/api/project_badges/measure?project=${sonarCoordinate}&amp;metric=sqale_rating" alt="Sonar Maintainability Rating (Sqale)" /></a></li>
 	<li><a href='https://coveralls.io/github/${coordinate}?branch=master'><img src='https://coveralls.io/repos/github/${coordinate}/badge.svg?branch=master' alt='Coverage Status' /></a></li>
 	<li><a class="externalLink" href="https://codecov.io/github/${coordinate}?branch=master" title="CodeCov"><img src="https://codecov.io/github/${coordinate}/coverage.svg?branch=master" alt="CodeCov" /></a></li>
-
-	<!--
-	<li><a href="https://bestpractices.coreinfrastructure.org/projects/XXXX"><img src="https://bestpractices.coreinfrastructure.org/projects/XXXX/badge"/></a></li>
-	-->
 	<li><a href="https://bitbucket.org/${coordinate}/issues?status=open" title="Number of issues still open"><img src="https://img.shields.io/bitbucket/issues/${coordinate}.svg" alt="Number of issues still open"/></a></li>
 	<li><a href="https://bitbucket.org/${coordinate}/pull-requests/" title="Number of open pull requests"><img src="https://img.shields.io/bitbucket/pr/${coordinate}.svg" alt="Number of open pull requests"/></a></li>
 </ul>
@@ -124,10 +124,10 @@
 
 <ul class="nav nav-list">
 	<li class="nav-header">Supported JVMs</li>
-	<li><a class="externalLink" href="https://www.azul.com/downloads/zulu/" title="Azul Zulu JDK8"><img src="https://img.shields.io/badge/JDK8-Azul_Zulu-2B60DE.svg" alt="Azul JDK8" /></a></li>
-	<li><a class="externalLink" href="https://www.oracle.com/technetwork/java/javase" title="Oracle Hotspot JDK8"><img src="https://img.shields.io/badge/JDK8-Oracle_Hotspot-red.svg" alt="Oracle JDK8" /></a></li>
-	<li><a class="externalLink" href="http://openjdk.java.net/" title="OpenJDK JDK8"><img src="https://img.shields.io/badge/JDK8-OpenJDK-orange.svg" alt="OpenJDK JDK8" /></a></li>
-	<li><a class="externalLink" href="https://www.ibm.com/developerworks/java/jdk" title="IBM JDK8"><img src="https://img.shields.io/badge/JDK8-IBM-blue.svg" alt="IBM JDK8" /></a></li>
+	<li><a class="externalLink" href="https://www.azul.com/downloads/zulu/" title="Azul Zulu"><img src="https://img.shields.io/badge/Java_8--10-Azul_Zulu-2B60DE.svg" alt="Azul Zulu" /></a></li>
+	<li><a class="externalLink" href="https://www.oracle.com/technetwork/java/javase" title="Oracle Hotspot"><img src="https://img.shields.io/badge/Java_8--10-Oracle_Hotspot-red.svg" alt="Oracle Hotspot" /></a></li>
+	<li><a class="externalLink" href="http://openjdk.java.net/" title="OpenJDK"><img src="https://img.shields.io/badge/Java_8--10-OpenJDK-orange.svg" alt="OpenJDK" /></a></li>
+	<li><a class="externalLink" href="https://www.eclipse.org/openj9" title="IBM/Eclipse J9"><img src="https://img.shields.io/badge/Java_8--10-Eclipse_J9-660099.svg" alt="IBM/Eclipse J9" /></a></li>
 </ul>
 
 <br/>

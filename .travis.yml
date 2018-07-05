@@ -12,7 +12,7 @@ sudo: false
 cache:
   directories:
   - "$HOME/.m2"
-  - "$HOME/apache-maven-3.5.0"
+  - "$HOME/apache-maven-3.5.4"
   - ""
 addons:
   apt:
@@ -24,9 +24,14 @@ addons:
     token:
       secure: "oJMmgr1sljCHu2LULAvvplYVuOx0Y5sY125k3MzzdY/2oisZouW68Wy0jV7Sn3y4exvK23dHrR40RwbfVDMid/A5tF7agdN5w83Obp3DNArn39ESnLb7mgO90HvZdc1hisqBF/1+alHiQ/+LUnqGZ1NvmZk+ov2Gtyaqii0fJXLuY2kr8xQE/FSgEciqVqlFhLw+/4BesMtLUKVkuczri94VtAetMDXW12nTqgPy5UJKRAGB7CaO5Py+eYuUGhCN7qpwmA5KCWY+NM82RNF/Fwzubj5exYGi3L5tl8poZUO7Kne/PFPnhwoO/cVEjSMW69oDirauAENuGLLqwazA04vGdo5YnCBvAooMFwClzj8c49eOPFvJc3eYKiHCm8UOmdtZcTj+8wDHCfFr3BKZ6YyZwwh6Y4jh1UWfrDAcCYseWBKTbtPJqvpHiMMjeCv/NEqebaIYCctJP3BVLuQ36Ly8FylPCD5dcCnjVLtJEnGwcGyuaQNguIM5Hxw4z/PqxSWsHuNEjBzaWUt/H/3QdvnSXrDmFPEhyxmQZ7vhEXKgzEybBWXkYTEFQJLTE/IKbPGs7GQE0jaXdQPIfiH7ouM/A1Mk7zWRASGqTItvwiIwWN9Nbeg9kJmWgVKx5T1RaAu22t0mWhPjQN0jnon3aJxWQTAhWQeCI7d3K0NxsR4="
 before_install:
+- sudo add-apt-repository ppa:linuxuprising/java -y
+- sudo apt-get update -q
+- sudo apt-get install oracle-java9-installer oracle-java10-installer -y
+- export JAVA_8_HOME=/usr/lib/jvm/java-8-oracle
+- export JAVA_HOME=${JAVA_8_HOME}
 - mkdir -p $HOME/.m2
-- export M2_HOME=$HOME/apache-maven-3.5.0
-- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.tar.gz | tar zxf - -C $HOME; fi
+- export M2_HOME=$HOME/apache-maven-3.5.4
+- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zxf - -C $HOME; fi
 - export PATH=$M2_HOME/bin:$PATH
 install:
 - chmod go-rwx -R $HOME/.m2
@@ -35,7 +40,7 @@ before_script:
 - wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.configuration/src/main/resources/settings.xml -O $HOME/ci-settings.xml 
 - mvn -v
 script:
-- mvn --settings $HOME/ci-settings.xml -U -P analyse,report,sonar
-- mvn --settings $HOME/ci-settings.xml -U -P analyse,report,site
+- mvn --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,sonar
+- mvn --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,site
 - mvn --settings $HOME/ci-settings.xml org.eluder.coveralls:coveralls-maven-plugin:report
 after_success: bash <(curl -s https://codecov.io/bash)

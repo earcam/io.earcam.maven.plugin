@@ -19,7 +19,7 @@
 package io.earcam.maven.plugin.netlify;
 
 import static org.apache.maven.plugins.annotations.InstantiationStrategy.SINGLETON;
-import static org.apache.maven.plugins.annotations.LifecyclePhase.SITE;
+import static org.apache.maven.plugins.annotations.LifecyclePhase.SITE_DEPLOY;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ import org.apache.maven.settings.Settings;
 /**
  * <a href="https://netlify.com">Netlify</a> site deploy plugin
  */
-@Mojo(name = "upload", requiresProject = true, threadSafe = true, inheritByDefault = false, defaultPhase = SITE, instantiationStrategy = SINGLETON)
+@Mojo(name = "upload", requiresProject = true, threadSafe = true, inheritByDefault = false, defaultPhase = SITE_DEPLOY, instantiationStrategy = SINGLETON)
 public class NetlifyUploadMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "${settings}", readonly = true, required = true)
@@ -45,9 +45,14 @@ public class NetlifyUploadMojo extends AbstractMojo {
 	MavenProject project;
 
 	/**
-	 * Server ID, references a {@code <server>} in your {@code ~/.m2/settings.xml}
+	 * Server ID, references a {@code <server>} in your {@code ~/.m2/settings.xml}, where your {@code <password>}
+	 * is your Netlify access token (generate via Netlify ⇒ Account Settings ⇒ OAuth applications ⇒ Personal access
+	 * tokens)
 	 */
-	@Parameter(property = "deploy.netlify.server.id", defaultValue = "${project.distributionManagement.site.id}", required = true)
+	// TODO default doesn't appear to be picked up
+	// @Parameter(property = "deploy.netlify.server.id", defaultValue = "${project.distributionManagement.site.id}",
+	// required = true)
+	@Parameter(property = "deploy.netlify.server.id", required = true)
 	String serverId;
 
 	/**

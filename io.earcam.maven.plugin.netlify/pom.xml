@@ -175,7 +175,7 @@
 				<configuration>
 					<goals>
 						<goal>site</goal>
-						<goal>post-site</goal>
+						<goal>site-deploy</goal>
 					</goals>
 					<properties>
 						<netlify.test.url>http://localhost:${port.wiremock}/api/v1/</netlify.test.url>

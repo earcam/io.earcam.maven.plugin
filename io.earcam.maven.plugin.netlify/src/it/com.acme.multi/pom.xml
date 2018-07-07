@@ -71,6 +71,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.7.1</version>
+				<configuration>
+					<skipDeploy>true</skipDeploy>
+				</configuration>
 			</plugin>
 			
 			<plugin>
@@ -78,6 +81,7 @@
 				<artifactId>io.earcam.maven.plugin.netlify</artifactId>
 				<version>${version.this.plugin}</version>
 				<configuration>
+					<serverId>custom-server-id-for-netlify</serverId>
 					<siteName>earcam-test-mutli</siteName>
 					<customDomain>def.earcam.io</customDomain>
 				</configuration>

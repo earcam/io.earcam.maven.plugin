@@ -6,10 +6,10 @@ We follow the [contributor-covenant][contributor-covenant] and request that you 
 
 Functional contributions and bug reports welcome, tests even more so.  Please follow these handy [guidelines][contribution-guidelines].
 
-Please see the [section on building][about-building] as modifications will fail the build if they do not conform to formatting conventions 
-(there's a Maven profile that trivially fixes this).
 
-Please follow semantic versioning principles, the build will fail if you don't.
+Please see the [section on building][about-building] as modifications will fail the build if they do not conform to formatting conventions 
+(there's a Maven profile that trivially fixes this).  
+
 
 
 ## Fork and be happy

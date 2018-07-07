@@ -72,6 +72,7 @@
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.6</version>
 				<configuration>
+					<skipDeploy>true</skipDeploy>
 					<inputEncoding>${project.reporting.outputEncoding}</inputEncoding>
 					<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
 					<generateProjectInfo>false</generateProjectInfo>
@@ -94,6 +95,7 @@
 				<artifactId>io.earcam.maven.plugin.netlify</artifactId>
 				<version>${version.this.plugin}</version>
 				<configuration>
+					<serverId>netlify</serverId>
 					<siteName>earcam-test-multi-nogen</siteName>
 					<customDomain>abc.earcam.io</customDomain>
 				</configuration>

@@ -26,12 +26,12 @@
 	<servers>
 		<server>
 			<id>netlify</id>
-			<password>081b0aaa4fa725e306e984feac542bb01da0d987ae6dde533f5d307ae5bc4a67</password> <!-- TODO do not commit this!!!!!!!!! -->
+			<password>netlify-oath-personal-access-token-goes-here</password>
 		</server>
 
 		<server>
 			<id>custom-server-id-for-netlify</id>
-			<password>081b0aaa4fa725e306e984feac542bb01da0d987ae6dde533f5d307ae5bc4a67</password> <!-- TODO do not commit this!!!!!!!!! -->
+			<password>netlify-oath-personal-access-token-goes-here</password>
 		</server>
 	</servers>
 

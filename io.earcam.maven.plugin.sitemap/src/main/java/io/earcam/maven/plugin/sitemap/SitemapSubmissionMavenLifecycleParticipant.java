@@ -38,7 +38,7 @@ public class SitemapSubmissionMavenLifecycleParticipant extends AbstractMavenLif
 	static final String NAME = "sitemapsubmission";
 	private static final String CATEGORY = '[' + NAME + ']';
 
-	private static volatile boolean shouldRun = false;
+	static volatile boolean shouldRun = false;
 	static URI baseUrl;
 	static File targetDir;
 	static List<String> hosts;

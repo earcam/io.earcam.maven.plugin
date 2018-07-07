@@ -11,4 +11,34 @@ however we have enjoyed, and continue to make use of, the free service.  This pl
 simply to make life easier (selfish til shared).
 
 
+
+To use, ensure the `maven-site-plugin` is configured to `skipDeploy` and that the `serverId` configured in the Netlify plugin is an existing server in `~/.m2/settings.xml`
+
+pom.xml:
+
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-site-plugin</artifactId>
+			<configuration>
+				<skipDeploy>true</skipDeploy>
+				<!-- ... -->
+			</configuration>
+		</plugin>
+		<plugin>
+			<groupId>io.earcam.maven.plugin</groupId>
+			<artifactId>io.earcam.maven.plugin.netlify</artifactId>
+			<configuration>
+				<serverId>the-id-used-for-netlify</serverId>
+				<!-- ... -->
+			</configuration>
+
+settings.xml:
+
+		<server>
+			<id>the-id-used-for-netlify</id>
+			<password>netlify-oath-personal-access-token-goes-here</password>
+		</server>
+
+
+
 [netlify]: https://netlify.com

@@ -18,7 +18,7 @@
  */
 package io.earcam.maven.plugin.sitemap;
 
-import static org.apache.maven.plugins.annotations.LifecyclePhase.DEPLOY;
+import static org.apache.maven.plugins.annotations.LifecyclePhase.SITE_DEPLOY;
 
 import java.io.File;
 import java.net.URI;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Mojo for submitting sitemaps
  */
-@Mojo(name = SitemapSubmissionMojo.NAME, requiresProject = true, threadSafe = true, inheritByDefault = false, defaultPhase = DEPLOY)
+@Mojo(name = SitemapSubmissionMojo.NAME, requiresProject = true, threadSafe = true, inheritByDefault = false, defaultPhase = SITE_DEPLOY)
 public class SitemapSubmissionMojo extends AbstractMojo {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SitemapIndexMavenLifecycleParticipant.class);

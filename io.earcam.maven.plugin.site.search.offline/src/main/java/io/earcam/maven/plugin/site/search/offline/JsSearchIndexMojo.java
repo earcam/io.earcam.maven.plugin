@@ -55,7 +55,7 @@ public class JsSearchIndexMojo extends AbstractMojo {
 	 * Use the default settings for {@link #crawler} and {@link #indexer} (if true then
 	 * {@link #crawler} or {@link #indexer} must not be specified)
 	 */
-	@Parameter(name = "useDefaultConfiguration", required = false, defaultValue = "false")
+	@Parameter(name = "useDefaultConfiguration", required = false, defaultValue = "true")
 	boolean useDefaultConfiguration;
 
 	/**

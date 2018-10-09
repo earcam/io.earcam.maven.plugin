@@ -39,7 +39,8 @@ before_script:
 - wget https://bitbucket.org/earcam/io.earcam.maven/raw/master/io.earcam.maven.configuration/src/main/resources/settings.xml -O $HOME/ci-settings.xml 
 - mvn -v
 script:
-- mvn --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,sonar
-- mvn --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,site
-- mvn --settings $HOME/ci-settings.xml org.eluder.coveralls:coveralls-maven-plugin:report
+- export MAVEN_OPTS=-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,sonar
+- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,site
+- mvn --batch-mode --settings $HOME/ci-settings.xml org.eluder.coveralls:coveralls-maven-plugin:report
 after_success: bash <(curl -s https://codecov.io/bash)

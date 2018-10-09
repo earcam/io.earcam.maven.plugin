@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>io.earcam.maven.plugin</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<packaging>pom</packaging>
 
 	<description>A disparate assortment of maven plugins</description>
@@ -28,7 +28,7 @@
 		<connection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</developerConnection>
 		<url>http://bitbucket.org/${coordinate.username.project}.git</url>
-		<tag>HEAD</tag>
+		<tag>v0.0.3</tag>
 	</scm>
 	<issueManagement>
 		<system>BitBucket</system>

@@ -66,7 +66,7 @@ public class SitemapSubmissionMojoTest {
 	@Before
 	public void before()
 	{
-		SitemapSubmissionMavenLifecycleParticipant.shouldRun = false;
+		SitemapSubmissionMavenLifecycleParticipant.run = false;
 		SitemapSubmissionMavenLifecycleParticipant.baseUrl = null;
 		SitemapSubmissionMavenLifecycleParticipant.targetDir = null;
 		SitemapSubmissionMavenLifecycleParticipant.hosts = null;
@@ -85,7 +85,7 @@ public class SitemapSubmissionMojoTest {
 		mojo.execute();
 		new SitemapSubmissionMavenLifecycleParticipant().afterSessionEnd(MOCK_MAVEN_SESSION);
 
-		assertThat(SitemapSubmissionMavenLifecycleParticipant.shouldRun, is(false));
+		assertThat(SitemapSubmissionMavenLifecycleParticipant.run, is(false));
 		assertThat(SitemapSubmissionMavenLifecycleParticipant.baseUrl, is(nullValue()));
 		assertThat(SitemapSubmissionMavenLifecycleParticipant.targetDir, is(nullValue()));
 		assertThat(SitemapSubmissionMavenLifecycleParticipant.hosts, is(nullValue()));
@@ -109,7 +109,7 @@ public class SitemapSubmissionMojoTest {
 		mojo.execute();
 		new SitemapSubmissionMavenLifecycleParticipant().afterSessionEnd(mavenSession);
 
-		assertThat(SitemapSubmissionMavenLifecycleParticipant.shouldRun, is(true));
+		assertThat(SitemapSubmissionMavenLifecycleParticipant.run, is(true));
 	}
 
 

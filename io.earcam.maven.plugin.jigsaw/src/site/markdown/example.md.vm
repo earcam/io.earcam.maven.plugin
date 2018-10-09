@@ -1,0 +1,17 @@
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+#set($h5 = '#####')
+
+#set($version.this.plugin = $project.version)
+
+
+Compile an existing `module-info.java`:
+
+#snippet ( "/src/it/compile.simple/pom.xml", "example-compile" )
+
+
+Generate `module-info.class` (and optionally `module-info.java`):
+
+#snippet ( "/src/it/generate.simple/pom.xml", "example-generate" )
+

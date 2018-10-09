@@ -1,0 +1,12 @@
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+#set($h5 = '#####')
+
+This plugin allows you to:
+
+* Compile `module-info.java`
+* Generate `module-info.class` (and optionally `module-info.java`)
+
+ Without needing a JDK > 8.
+ 

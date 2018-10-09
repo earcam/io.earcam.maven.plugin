@@ -38,7 +38,7 @@ public class SitemapSubmissionMavenLifecycleParticipant extends AbstractMavenLif
 	static final String NAME = "sitemapsubmission";
 	private static final String CATEGORY = '[' + NAME + ']';
 
-	static volatile boolean shouldRun = false;
+	static volatile boolean run = false;
 	static URI baseUrl;
 	static File targetDir;
 	static List<String> hosts;
@@ -51,8 +51,8 @@ public class SitemapSubmissionMavenLifecycleParticipant extends AbstractMavenLif
 			LOG.warn("{} extension: not running due to previous build errors", CATEGORY);
 			return;
 		}
-		LOG.debug("{} extension: configured to run: {}", CATEGORY, shouldRun);
-		if(shouldRun) {
+		LOG.debug("{} extension: configured to run: {}", CATEGORY, run);
+		if(run) {
 			String responses = Sitemaps.submit(targetDir.toPath(), baseUrl, hosts);
 			LOG.info("{} extension ran, responses: {}", CATEGORY, responses);
 		}
@@ -61,7 +61,7 @@ public class SitemapSubmissionMavenLifecycleParticipant extends AbstractMavenLif
 
 	static void shouldRun(URI baseUrl, File targetDir, List<String> hosts)
 	{
-		shouldRun = true;
+		run = true;
 		SitemapSubmissionMavenLifecycleParticipant.baseUrl = baseUrl;
 		SitemapSubmissionMavenLifecycleParticipant.targetDir = targetDir;
 		SitemapSubmissionMavenLifecycleParticipant.hosts = hosts;

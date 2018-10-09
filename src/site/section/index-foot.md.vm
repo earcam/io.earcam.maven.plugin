@@ -1,6 +1,7 @@
 
-Not using M<span class="aye">a</span>ven? Don't despair, the underlying functionality of each plugin can be found in modules of the [io.earcam.utilitarian][utilitarian] project.
+Not using M<span class="aye">a</span>ven? Don't despair, the underlying functionality of each plugin can be found in modules of the projects [io.earcam.utilitarian][utilitarian] and [io.earcam.instrumental][instrumental] .
 
-Note: currently the few available plugins are all maven site specific; so sweeping statements like "disparate assortment" and "veritable ménagerie" aren't accurate. 
+Note: the few available plugins are mostly maven site specific; so sweeping statements like "disparate assortment" and "veritable ménagerie" aren't quite accurate. 
 
-[utilitarian]: https://utilitarian.earcam.io/ 
+[utilitarian]: https://utilitarian.earcam.io
+[instrumental]: https://instrumental.earcam.io

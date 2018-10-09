@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.earcam.maven</groupId>
 		<artifactId>io.earcam.maven.pom</artifactId>
-		<version>2.2.1</version>
+		<version>2.2.2</version>
 	</parent>
 
 	<artifactId>io.earcam.maven.plugin</artifactId>
@@ -17,10 +17,11 @@
 	<inceptionYear>2017</inceptionYear>
 
 	<modules>
-		<!-- <module>io.earcam.maven.plugin.ramdisk</module> -->
+		<module>io.earcam.maven.plugin.ramdisk</module>
 		<module>io.earcam.maven.plugin.netlify</module>
 		<module>io.earcam.maven.plugin.sitemap</module>
 		<module>io.earcam.maven.plugin.site.search.offline</module>
+		<module>io.earcam.maven.plugin.jigsaw</module>
 	</modules>
 
 	<scm>
@@ -57,10 +58,13 @@
 		<earcam.project.name.short />
 
 		<skip.execution.pitest>true</skip.execution.pitest>
+		
 		<version.slf4j>1.7.25</version.slf4j>
-
-		<version.utilitarian>1.2.0-SNAPSHOT</version.utilitarian>
-		<version.unexceptional>0.5.2-SNAPSHOT</version.unexceptional>
+		<version.utilitarian>1.2.0</version.utilitarian>
+		<version.instrumental>0.1.0</version.instrumental>
+		<version.unexceptional>1.0.0</version.unexceptional>
+		<version.aether>1.1.1</version.aether>
+		<version.maven>3.5.4</version.maven>
 	</properties>
 
 	<dependencyManagement>
@@ -102,7 +106,7 @@
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-plugin-api</artifactId>
-				<version>3.5.4</version>
+				<version>${version.maven}</version>
 			</dependency>
 
 			<dependency>
@@ -121,7 +125,61 @@
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-core</artifactId>
-				<version>3.5.4</version>
+				<version>${version.maven}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-api</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-spi</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-util</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-impl</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-connector-basic</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-transport-file</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven.resolver</groupId>
+				<artifactId>maven-resolver-transport-http</artifactId>
+				<version>${version.aether}</version>
+			</dependency>
+	
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-resolver-provider</artifactId>
+				<version>${version.maven}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.eclipse.sisu</groupId>
+						<artifactId>org.eclipse.sisu.plexus</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -230,6 +288,7 @@
 					<groupId>org.revapi</groupId>
 					<artifactId>revapi-maven-plugin</artifactId>
 					<configuration>
+						<skip>true</skip>
 						<analysisConfiguration>
 							<revapi.ignore>
 								<item>

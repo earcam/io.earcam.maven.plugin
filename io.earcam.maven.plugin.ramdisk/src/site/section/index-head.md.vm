@@ -1,0 +1,41 @@
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+#set($h5 = '#####')
+
+Switch Maven build directories to ramdisk/tmpfs (with symbolic-links for any 
+presumptuous plugins and tests).
+
+Saves hammering hard drives with ephemeral content and, context-dependent, 
+*may* make your build run a bit faster (am seeing; on local build (with
+source held on an SSD) a ~75% difference (~3m20s with and 4m30s without).
+
+I suspect on VM-based CI environments the saving may be considerably higher -
+anecdotal evidence to follow. 
+
+$h4 Usage
+
+In the `<plugins>` section, include the following:
+
+#snippet ( "/src/it/single.property/pom.xml", "example-definition" ) 
+			
+* `<extensions>true</extensions>` must be included in the plugin definition
+* there are no plugin goals or configuration to specify
+
+
+$h5 Force base path
+
+Set the property either cmdline `-D` or in the pom.xml's `<properties>`:
+
+#snippet ( "/src/it/single.property/pom.xml", "example-property" ) 
+
+
+$h4 Supported on all UNIX Operating Systems
+
+Users of Windows should consider ubuntu-shell or something like [ImDisk](https://www.google.com/search?q=imdisk) (from a reputable source), 
+and then set the base path (see above).
+
+
+<div>
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/SY0nDM3NSd8?rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+</div>

@@ -36,7 +36,7 @@ public class JsSearchLifecycleParticipant extends AbstractMavenLifecycleParticip
 
 	private static final Logger LOG = LoggerFactory.getLogger(JsSearchLifecycleParticipant.class);
 
-	private static Indexer indexer;
+	private static volatile Indexer indexer;
 
 
 	static void indexer(Indexing indexing)

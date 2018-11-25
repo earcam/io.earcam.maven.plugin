@@ -19,9 +19,10 @@
 import java.nio.file.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import io.earcam.utilitarian.site.search.offline.*;
+import io.earcam.maven.plugin.site.search.offline.JsSearchIndexMojo;
 
 try { 
-	
+	JsSearchIndexMojo.workaroundForMavenVersusJdk9AndNashorn();
 	Path js = basedir.toPath().resolve(Paths.get("target", "site", "js", "ui.search.lunr.js"));
 	assert !js.toFile().exists() : "file '" + js + "' should not exist - goal was not specified";
 	

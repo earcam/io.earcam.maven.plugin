@@ -23,14 +23,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.acme.diskette.o.rama</groupId>
-	<artifactId>single.property</artifactId>
+	<artifactId>extension-single-property</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<properties>
-		<!-- EARCAM_SNIPPET_BEGIN: example-property -->
-		<earcam.maven.ramdisk.dir>/tmp/build/maven</earcam.maven.ramdisk.dir>
-		<!-- EARCAM_SNIPPET_END: example-property -->
+		<!-- EARCAM_SNIPPET_BEGIN: example-skip-property -->
+		<earcam.ramdisk.skip>true</earcam.ramdisk.skip>
+		<!-- EARCAM_SNIPPET_END: example-skip-property -->
 	
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -39,15 +39,12 @@
 	</properties>
 	
 	<build>
-		<plugins>
-			<!-- EARCAM_SNIPPET_BEGIN: example-definition -->
-			<plugin>
+		<extensions>
+			<extension>
 				<groupId>io.earcam.maven.plugin</groupId>
 				<artifactId>io.earcam.maven.plugin.ramdisk</artifactId>
 				<version>${version.this.plugin}</version>
-				<extensions>true</extensions>
-			</plugin>
-			<!-- EARCAM_SNIPPET_END: example-definition -->
-		</plugins>
+			</extension>
+		</extensions>
 	</build>
 </project>

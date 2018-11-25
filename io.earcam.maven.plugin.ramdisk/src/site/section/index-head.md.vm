@@ -3,39 +3,151 @@
 #set($h4 = '####')
 #set($h5 = '#####')
 
-Switch Maven build directories to ramdisk/tmpfs (with symbolic-links for any 
-presumptuous plugins and tests).
-
-Saves hammering hard drives with ephemeral content and, context-dependent, 
-*may* make your build run a bit faster (am seeing; on local build (with
-source held on an SSD) a ~75% difference (~3m20s with and 4m30s without).
-
-I suspect on VM-based CI environments the saving may be considerably higher -
-anecdotal evidence to follow. 
-
-$h4 Usage
-
-In the `<plugins>` section, include the following:
-
-#snippet ( "/src/it/single.property/pom.xml", "example-definition" ) 
-			
-* `<extensions>true</extensions>` must be included in the plugin definition
-* there are no plugin goals or configuration to specify
+<span style="float:right;font-size-adjust:1.25">&#x1f4a1;</span><h3>What</h3>
 
 
-$h5 Force base path
+Switch Maven build directories to ramdisk/tmpfs (such that all generated files are in-memory).
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f52c;</span><h3>Why</h3>
+
+* Faster builds
+* Save SSD/HDD from ephemeral churn
+
+On local desktop (with projects on SATA3 SSD), I observe a 20-30% reduction in build time 
+(with/out 
+[parallel build](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) 
+settings).
+
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f529;</span><h3>How</h3>
+
+Hooks into the build at various points, swapping `$escape.java("${")project.build.directory$escape.java("}")` (by default `./target`)
+with a symbolic-link pointing to a directory in `tmpfs` (intentionally avoiding modification of build properties, implicit 
+default or otherwise.
+
+This approach has the lightest touch, allowing presumptuous plugins and tests to continue in oblivion.  However it does 
+requires running the plugin with extensions enabled or as a standalone extension.
+
+If you're using feature-branching, or similar (effectively parallel builds of the same groupId:artifactId:version), then 
+you must explicitly state the branch identifier in the POM.  Alternatively you may manage this by setting the `tmpfs` base 
+path as a property. 
+
+By way of example: a mapping into tmpfs has the form `/run/user/1000/maven/groupId/artifactId/version/HEAD` - parallel builds need 
+some unique combination of `tmpfs_root + groupId + artifactId + version + branchId` (note: the tmpfs root can be different per user).
+
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f528;</span><h3>Usage</h3>
+
+As previously stated, this is both a plugin and a 
+[build extension](https://maven.apache.org/examples/maven-3-lifecycle-extensions.html#Use_your_extension_in_your_build.28s.29).  
+This provides opportunity for use without modifying checkouts or remembering to augment maven commands.  
+
+Review the dis/advantages of options, below and select the best fit for your use-case.
+
+$h4 Usage Option 1: Maven distribution extension
+
+Add the [uber jar](https://search.maven.org/remotecontent?filepath=io/earcam/maven/plugin/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}-uber.jar) to `$escape.java("${")MAVEN_HOME$escape.java("}")/lib/ext` 
+
+* Advantages:
+   0. Ensure all Maven projects using this distribution are built in ram (exceptional cases can skipped with property)
+   0. No modification to checked out project
+   0. No augmentation of maven commands 
+* Disadvantages:
+   0. All the issues that come with [monkey-patching](https://en.wikipedia.org/wiki/Monkey_patch)
+   0. No version update reporting
+   0. No transparency (not so bad if you codify this monkey-patch via CD, eg. Dockerfile, Puppet, Ansible, etc) 
+ 
+
+$h4 Usage Option 2: Project core extension
+
+Define [core extensions](https://maven.apache.org/ref/3.6.0/maven-embedder/core-extensions.html), by downloading   
+[extensions.xml](https://search.maven.org/remotecontent?filepath=io/earcam/maven/plugin/${project.artifactId}/${project.version}/${project.artifactId}-${project.version}-extensions.xml) 
+and saving as `$escape.java("${")project.baseDir$escape.java("}")/.mvn/extensions.xml` (or otherwise editing existing to include). 
+
+* Prerequisite: Maven >= 3.3.1
+* Advantages:
+   0. Doesn't alter existing checked out files
+   0. Determined on a per-project basis
+   0. Safe; ignored if unsupported (eg. Windows)
+* Disadvantages:
+   0. Not inherited (only applied to explicitly stated child modules)
+   0. Still modifies the checked out project (if not committed, which may not be possible)
+   0. Not sure this would covered by version update (reporting and automating update)
+   0. Not much transparency (given most IDEs and file browsers don't show `.hidden` directories by default)
+
+
+$h4 Usage Option 3: POM build extension or plugin
+
+The double-edged sword of explicit definition.
+
+In the `<build>` section, include the following:
+
+#snippet ( "/src/it/extension-single-property/pom.xml", "example-definition" ) 
+
+Or:
+
+#snippet ( "/src/it/plugin-with-extension-single/pom.xml", "example-plugin-with-extension" ) 
+
+Note: `<extensions>true</extensions>` in the above is vital.
+
+* Advantages:
+   0. Explicit definition (immediately obvious to developer)
+   0. Can be defined in a common parent and inherited
+   0. Safe; ignored if unsupported (eg. Windows)
+   0. Subject to version update reports
+* Disadvantages:
+   0. Explicit definition (requires author to apply, or client modification of XML)
+   0. Might make non-Linux users more sad 
+
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f5d1;</span><h3>Removing</h3>
+
+If you decide to remove the plugin/extension, then you may be left with dead softlinks.  The following
+goal can be executed manually to remove softlinks (dead or alive):
+ 
+		mvn ramdisk:cleanup
+
+Or (if not defined in the project's pom):
+
+		mvn ${project.groupId}:${project.artifactId}:${project.version}:cleanup
+
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f527;</span><h3>Properties</h3>
+
+$h4 Skip execution
 
 Set the property either cmdline `-D` or in the pom.xml's `<properties>`:
 
-#snippet ( "/src/it/single.property/pom.xml", "example-property" ) 
+#snippet ( "/src/it/extension-single-skip/pom.xml", "example-skip-property" ) 
 
 
-$h4 Supported on all UNIX Operating Systems
+$h4 Force base path
 
-Users of Windows should consider ubuntu-shell or something like [ImDisk](https://www.google.com/search?q=imdisk) (from a reputable source), 
+Set the property either cmdline `-D` or in the pom.xml's `<properties>`:
+
+#snippet ( "/src/it/extension-single-property/pom.xml", "example-property" ) 
+
+
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f427;</span><h3>Supported Operating Systems</h3>
+
+Really only aimed at Linux/UNIX.
+
+Mac OSX users can create a ramdisk and then set this `ram://` FS via the base path property 
+(then further could be achieve global zero-conf with an always active profile in `~/.m2/settings.xml')
+
+Users of Windows could try with ubuntu-shell or consider something like [ImDisk](https://www.google.com/search?q=imdisk) (from a reputable source), 
 and then set the base path (see above).
 
+<p>&nbsp;</p>
+<span style="float:right;font-size-adjust:1.25">&#x1f969;</span><h3>Inspiration</h3>
 
 <div>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/SY0nDM3NSd8?rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
 </div>
+

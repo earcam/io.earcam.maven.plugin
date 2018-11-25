@@ -19,7 +19,11 @@
 package io.earcam.maven.plugin.ramdisk;
 
 import static io.earcam.maven.plugin.ramdisk.RamdiskBuildExtension.NAME;
+import static io.earcam.maven.plugin.ramdisk.RamdiskMojo.PROPERTY_DIRECTORY;
+import static io.earcam.maven.plugin.ramdisk.RamdiskMojo.PROPERTY_SKIP;
 import static java.nio.charset.Charset.defaultCharset;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +40,8 @@ import java.util.Scanner;
 
 import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginExecution;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
@@ -42,49 +49,78 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.earcam.unexceptional.Exceptional;
+import io.earcam.utilitarian.io.IoStreams;
 import io.earcam.utilitarian.io.file.RecursiveFiles;
 
 @Component(role = AbstractMavenLifecycleParticipant.class, hint = NAME, instantiationStrategy = "singleton")
 public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 
-	static final String PROPERTY = "earcam.maven.ramdisk.dir";
-	static final String NAME = "ramdisk";
 	private static final String TMPFS_NOT_FOUND = "Could not determine tmpfs directory to use for target";
 	private static final Logger LOG = LoggerFactory.getLogger(RamdiskBuildExtension.class);
 
+	static final String NAME = "ramdisk";
+	static final String LOG_CATEGORY = "[ramdisk-extension]";
+
 	Path tmpFsRoot;
+	private Plugin plugin;
 
 
 	@Override
 	public void afterProjectsRead(MavenSession session)
 	{
+		Properties userProperties = session.getUserProperties();
+		if(shouldSkip(userProperties, LOG_CATEGORY)) {
+			return;
+		}
+		userProperties.put("clean.followSymLinks", "true");
+		userProperties.put("maven.clean.followSymLinks", "true");
+
 		tmpFsRoot = selectTmpFs(session.getCurrentProject());
 		if(tmpFsRoot == null) {
-			LOG.warn(TMPFS_NOT_FOUND);
+			LOG.warn("{} {}", LOG_CATEGORY, TMPFS_NOT_FOUND);
 			return;
 		}
 		List<MavenProject> modules = session.getAllProjects();
-		LOG.debug("Applying ramdisk for: {}", modules);
+		LOG.debug("{} Applying ramdisk for: {}", LOG_CATEGORY, modules);
+
+		plugin = createPlugin();
+
 		modules.forEach(this::createTmpFsBuildDir);
 	}
 
 
-	Path selectTmpFs(MavenProject project)
+	static boolean shouldSkip(Properties properties, String logCategory)
+	{
+		boolean skip = "true".equals(properties.getOrDefault(PROPERTY_SKIP, "false"));
+		if(skip) {
+			LOG.debug("{} configured to skip execution", logCategory);
+		}
+		return skip;
+	}
+
+
+	protected Path selectTmpFs(MavenProject project)
+	{
+		return tmpFsFor(project);
+	}
+
+
+	static Path tmpFsFor(MavenProject project)
 	{
 		Optional<Path> fromProperty = fromProperty(project.getProperties());
 		return fromProperty.orElse(findTmpFs());
 	}
 
 
-	private Optional<Path> fromProperty(Properties properties)
+	private static Optional<Path> fromProperty(Properties properties)
 	{
-		return Optional.ofNullable(properties.getProperty(PROPERTY, System.getProperty(PROPERTY)))
+		return Optional.ofNullable(properties.getProperty(PROPERTY_DIRECTORY, System.getProperty(PROPERTY_DIRECTORY)))
 				.map(File::new)
 				.map(File::toPath);
 	}
 
 
-	Path findTmpFs()
+	static Path findTmpFs()
 	{
 		String uid = extractUid();
 
@@ -114,19 +150,56 @@ public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 				return Integer.toString(scanner.nextInt());
 			}
 		} catch(Exception e) {
-			LOG.debug("Unable to get UID", e);
+			LOG.debug("{} Unable to get UID", LOG_CATEGORY, e);
 			return null;
 		}
 	}
 
 
+	private Plugin createPlugin()
+	{
+		String scrapeDeets = "META-INF/maven/io.earcam.maven.plugin/io.earcam.maven.plugin.ramdisk/plugin-help.xml";
+		String xml = new String(IoStreams.readAllBytes(getClass().getClassLoader().getResourceAsStream(scrapeDeets)), UTF_8);
+
+		Plugin plugin = new Plugin();
+		plugin.setGroupId(extractFromXml(xml, "<groupId>", "</groupId>"));
+		plugin.setArtifactId(extractFromXml(xml, "<artifactId>", "</artifactId>"));
+		plugin.setVersion(extractFromXml(xml, "<version>", "</version>"));
+
+		PluginExecution exec = new PluginExecution();
+		exec.setId("post-clean");
+		exec.setGoals(Collections.singletonList("ramdisk"));
+		exec.setPhase("post-clean");
+		plugin.addExecution(exec);
+
+		exec = new PluginExecution();
+		exec.setId("validate");
+		exec.setGoals(Collections.singletonList("ramdisk"));
+		exec.setPhase("validate");
+		plugin.addExecution(exec);
+		return plugin;
+	}
+
+
+	private String extractFromXml(String xml, String openTag, String closeTag)
+	{
+		int start = xml.indexOf(openTag);
+		int end = xml.indexOf(closeTag);
+		return xml.substring(start + openTag.length(), end);
+	}
+
+
 	private void createTmpFsBuildDir(MavenProject project)
 	{
+		if(shouldSkip(project.getProperties(), LOG_CATEGORY)) {
+			return;
+		}
+		project.getBuild().addPlugin(plugin);
 		Exceptional.accept(RamdiskBuildExtension::createTmpFsBuildDir, project, tmpFsRoot);
 	}
 
 
-	private static void createTmpFsBuildDir(MavenProject project, Path tmpFs) throws IOException
+	static void createTmpFsBuildDir(MavenProject project, Path tmpFs) throws IOException
 	{
 		Objects.requireNonNull(tmpFs, TMPFS_NOT_FOUND);
 
@@ -140,18 +213,17 @@ public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 		Path link = Paths.get(project.getBuild().getDirectory());
 
 		if(link.toFile().exists() && !Files.isSymbolicLink(link)) {
-			LOG.debug("local target directory exists but is not a symbolic link, moving contents: {}", link);
-			RecursiveFiles.move(link, linkTarget);
+			LOG.debug("{} local target directory exists but is not a symbolic link, moving contents: {}", LOG_CATEGORY, link);
+			RecursiveFiles.move(link, linkTarget, REPLACE_EXISTING);
 
 			// TODO what-if: link exists but points somewhere else ...
 			// use-case, someone switches branches
 			// we'll need to check: (!Files.readSymbolicLink(linkSource).equals(linkTarget.toAbsolutePath()))
 		}
 		if(!link.toFile().exists()) {
-			LOG.debug("link does not exist, creating: {}", link);
+			LOG.debug("{} link does not exist, creating: {}", LOG_CATEGORY, link);
 			Files.createSymbolicLink(link, linkTarget);
 		}
-		project.getBuild().setDirectory(linkTarget.toAbsolutePath().toString());
 	}
 
 
@@ -175,26 +247,13 @@ public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 	}
 
 
+	/**
+	 * This ensures that softlinks are recreated to avoid things like IDEs (that
+	 * may be oblivious to extensions) creating "target" directories after a clean.
+	 */
 	@Override
 	public void afterSessionEnd(MavenSession session)
 	{
-		session.getAllProjects().stream()
-				.map(MavenProject::getBasedir)
-				.map(File::toPath)
-				.map(p -> p.resolve("target"))
-				.forEach(this::relink);
-	}
-
-
-	private void relink(Path link)
-	{
-		LOG.debug("checking {}", link);
-		if(Files.isSymbolicLink(link)) {
-			File linkTarget = Exceptional.apply(Files::readSymbolicLink, link).toFile();
-			if(!linkTarget.exists()) {
-				linkTarget.mkdirs();
-				LOG.debug("re-linked {}", linkTarget);
-			}
-		}
+		session.getAllProjects().forEach(this::createTmpFsBuildDir);
 	}
 }

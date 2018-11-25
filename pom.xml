@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.earcam.maven</groupId>
 		<artifactId>io.earcam.maven.pom</artifactId>
-		<version>2.2.2</version>
+		<version>2.2.3</version>
 	</parent>
 
 	<artifactId>io.earcam.maven.plugin</artifactId>
@@ -15,6 +15,10 @@
 	<description>A disparate assortment of maven plugins</description>
 	<url>${site.url}${earcam.project.name.short}</url>
 	<inceptionYear>2017</inceptionYear>
+
+	<prerequisites>
+		<maven>3.5.4</maven>
+	</prerequisites>
 
 	<modules>
 		<module>io.earcam.maven.plugin.ramdisk</module>
@@ -58,13 +62,15 @@
 		<earcam.project.name.short />
 
 		<skip.execution.pitest>true</skip.execution.pitest>
-		
+
 		<version.slf4j>1.7.25</version.slf4j>
-		<version.utilitarian>1.2.0</version.utilitarian>
+		<version.utilitarian>1.2.1</version.utilitarian>
 		<version.instrumental>0.1.0</version.instrumental>
 		<version.unexceptional>1.0.0</version.unexceptional>
 		<version.aether>1.1.1</version.aether>
 		<version.maven>3.5.4</version.maven>
+
+		<version.this.plugin>${project.version}</version.this.plugin>
 	</properties>
 
 	<dependencyManagement>
@@ -72,6 +78,12 @@
 			<dependency>
 				<groupId>io.earcam.utilitarian</groupId>
 				<artifactId>io.earcam.utilitarian.io</artifactId>
+				<version>${version.utilitarian}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.earcam.utilitarian</groupId>
+				<artifactId>io.earcam.utilitarian.io.file</artifactId>
 				<version>${version.utilitarian}</version>
 			</dependency>
 
@@ -133,43 +145,43 @@
 				<artifactId>maven-resolver-api</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-spi</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-util</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-impl</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-connector-basic</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-transport-file</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven.resolver</groupId>
 				<artifactId>maven-resolver-transport-http</artifactId>
 				<version>${version.aether}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.apache.maven</groupId>
 				<artifactId>maven-resolver-provider</artifactId>
@@ -206,7 +218,7 @@
 			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
-				<version>2.19.0</version>
+				<version>2.23.4</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -297,7 +309,7 @@
 									<package>${project.groupId}.*</package>
 									<justification>Annotations do not form part of the API</justification>
 								</item>
-							</revapi.ignore>		
+							</revapi.ignore>
 						</analysisConfiguration>
 					</configuration>
 				</plugin>
@@ -458,7 +470,19 @@
 							<artifactId>doxia-site-renderer</artifactId>
 							<version>1.8.1</version>
 						</dependency>
+						<!-- Allows verify.goovy IT scripts to deal with bytecode > JDK6 -->
+						<dependency>
+							<groupId>org.codehaus.groovy</groupId>
+							<artifactId>groovy</artifactId>
+							<version>2.5.4</version>
+						</dependency>
 					</dependencies>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.0.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -487,7 +511,7 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			
+
 			<build>
 				<plugins>
 					<plugin>
@@ -593,7 +617,9 @@
 								<configuration>
 									<target>
 										<copy todir="${project.reporting.outputDirectory}/js/">
-											<fileset dir="${project.build.directory}/unpacked/META-INF/resources/js/" includes="ui.search.lunr.js" />
+											<fileset
+												dir="${project.build.directory}/unpacked/META-INF/resources/js/"
+												includes="ui.search.lunr.js" />
 										</copy>
 									</target>
 								</configuration>

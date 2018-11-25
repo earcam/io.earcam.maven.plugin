@@ -18,6 +18,8 @@
  */
 package io.earcam.maven.plugin.ramdisk;
 
+import static io.earcam.maven.plugin.ramdisk.RamdiskMojo.PROPERTY_DIRECTORY;
+import static io.earcam.maven.plugin.ramdisk.RamdiskMojo.PROPERTY_SKIP;
 import static io.earcam.maven.plugin.ramdisk.RamdiskBuildExtension.relativePathFor;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.LocalDateTime.now;
@@ -78,16 +80,21 @@ public class RamdiskBuildExtensionTest {
 		baseDir.toFile().mkdirs();
 		extension = new RamdiskBuildExtension();
 
+		when(session.getUserProperties()).thenReturn(new Properties());
 		when(session.getCurrentProject()).thenReturn(project);
 		when(session.getAllProjects()).thenReturn(singletonList(project));
 
 		when(project.getGroupId()).thenReturn(randomUUID().toString());
 		when(project.getArtifactId()).thenReturn(randomUUID().toString());
 		when(project.getVersion()).thenReturn("0.1.0");
+		when(project.getPackaging()).thenReturn("jar");
 
 		when(project.getBuild()).thenReturn(build);
 		when(project.getBasedir()).thenReturn(baseDir.toFile());
 		when(build.getDirectory()).thenReturn(buildDir.toAbsolutePath().toString());
+
+		when(build.getOutputDirectory()).thenReturn(buildDir.resolve("classes").toAbsolutePath().toString());
+		when(build.getTestOutputDirectory()).thenReturn(buildDir.resolve("test-classes").toAbsolutePath().toString());
 
 		when(project.getProperties()).thenReturn(new Properties());
 	}
@@ -109,10 +116,26 @@ public class RamdiskBuildExtensionTest {
 		String username = System.getProperty("user.name");
 		try {
 			System.setProperty("user.name", "completelymadeupandhopefullynosystemanywherehassomethingthisridiculous");
-			assertThat(extension.findTmpFs(), is(equalTo(Paths.get("/", "dev", "shm"))));
+			assertThat(RamdiskBuildExtension.findTmpFs(), is(equalTo(Paths.get("/", "dev", "shm"))));
 		} finally {
 			System.setProperty("user.name", username);
 		}
+	}
+
+
+	@Test
+	public void pomModuleDoesNotHaveClassesDirectory()
+	{
+		when(project.getPackaging()).thenReturn("pom");
+
+		extension.afterProjectsRead(session);
+
+		moduleTargetDir = moduleTargetDir();
+
+		assertThat(moduleTargetDir.toFile(), is(anExistingDirectory()));
+		assertThat(moduleTargetDir.resolve("classes").toFile(), is(not(anExistingDirectory())));
+
+		assertThat(buildDir, is(aSoftlinkPointingTo(moduleTargetDir)));
 	}
 
 
@@ -170,7 +193,7 @@ public class RamdiskBuildExtensionTest {
 
 	private Path moduleTargetDir()
 	{
-		return extension.findTmpFs().resolve(relativePathFor(project));
+		return RamdiskBuildExtension.findTmpFs().resolve(relativePathFor(project));
 	}
 
 
@@ -247,7 +270,7 @@ public class RamdiskBuildExtensionTest {
 	{
 		RamdiskBuildExtension extension = new RamdiskBuildExtension() {
 			@Override
-			Path findTmpFs()
+			protected Path selectTmpFs(MavenProject project)
 			{
 				return null;
 			}
@@ -280,13 +303,12 @@ public class RamdiskBuildExtensionTest {
 	{
 		moduleTargetDir = moduleTargetDir();
 		moduleTargetDir.toFile().mkdirs();
-
 		buildDir.toFile().mkdirs();
+		extension.tmpFsRoot = extension.selectTmpFs(project);
 
 		extension.afterSessionEnd(session);
 
 		assertThat(moduleTargetDir.toFile(), is(anExistingDirectory()));
-
 		assertThat(buildDir.toFile(), is(anExistingDirectory()));
 	}
 
@@ -296,13 +318,12 @@ public class RamdiskBuildExtensionTest {
 	{
 		moduleTargetDir = moduleTargetDir();
 		moduleTargetDir.toFile().mkdirs();
-
 		Files.createSymbolicLink(buildDir, moduleTargetDir);
+		extension.tmpFsRoot = extension.selectTmpFs(project);
 
 		extension.afterSessionEnd(session);
 
 		assertThat(moduleTargetDir.toFile(), is(anExistingDirectory()));
-
 		assertThat(buildDir, is(aSoftlinkPointingTo(moduleTargetDir)));
 	}
 
@@ -312,36 +333,67 @@ public class RamdiskBuildExtensionTest {
 	{
 		moduleTargetDir = moduleTargetDir();
 		moduleTargetDir.toFile().mkdirs();
-
 		Files.createSymbolicLink(buildDir, moduleTargetDir);
-
 		moduleTargetDir.toFile().delete();
 
 		assertThat("pre-condition", moduleTargetDir.toFile(), is(not(anExistingFileOrDirectory())));
 
+		extension.tmpFsRoot = extension.selectTmpFs(project);
 		extension.afterSessionEnd(session);
 
 		assertThat(moduleTargetDir.toFile(), is(anExistingDirectory()));
-
 		assertThat(buildDir, is(aSoftlinkPointingTo(moduleTargetDir)));
 	}
 
 
 	@Test
-	public void whenPropertyPresentThenUsed() throws IOException
+	public void whenDirPropertyPresentThenUsed() throws IOException
 	{
 		String tmpFs = "/tmp/maven_" + now(systemDefault()) + "_" + randomUUID();
 		Properties properties = new Properties();
-		properties.setProperty(RamdiskBuildExtension.PROPERTY, tmpFs);
+		properties.setProperty(PROPERTY_DIRECTORY, tmpFs);
 
 		when(project.getProperties()).thenReturn(properties);
 
 		extension.afterProjectsRead(session);
 
-		Path selected = extension.selectTmpFs(project);
+		Path selected = RamdiskBuildExtension.tmpFsFor(project);
 
 		assertThat(selected.toString(), is(equalTo(tmpFs)));
 		assertThat(selected.toFile(), is(anExistingDirectory()));
+	}
 
+
+	@Test
+	public void whenGlobalSkipPropertyIsTrueThenSkipsExecution()
+	{
+		Properties properties = new Properties();
+		properties.put(PROPERTY_SKIP, "true");
+		when(session.getUserProperties()).thenReturn(properties);
+
+		extension.afterProjectsRead(session);
+
+		moduleTargetDir = moduleTargetDir();
+
+		assertThat(moduleTargetDir.toFile(), is(not(anExistingDirectory())));
+
+		assertThat(buildDir.toFile(), is(not(anExistingFileOrDirectory())));
+	}
+
+
+	@Test
+	public void whenProjectSkipPropertyIsTrueThenSkipsExecution()
+	{
+		Properties properties = new Properties();
+		properties.put(PROPERTY_SKIP, "true");
+		when(project.getProperties()).thenReturn(properties);
+
+		extension.afterProjectsRead(session);
+
+		moduleTargetDir = moduleTargetDir();
+
+		assertThat(moduleTargetDir.toFile(), is(not(anExistingDirectory())));
+
+		assertThat(buildDir.toFile(), is(not(anExistingFileOrDirectory())));
 	}
 }

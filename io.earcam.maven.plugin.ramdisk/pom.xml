@@ -29,8 +29,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>io.earcam.utilitarian</groupId>
+			<artifactId>io.earcam.utilitarian.io</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.earcam.utilitarian</groupId>
 			<artifactId>io.earcam.utilitarian.io.file</artifactId>
-			<version>${version.utilitarian}</version>
 		</dependency>
 
 		<dependency>
@@ -90,6 +94,16 @@
 	</dependencies>
 
 	<build>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<includes>
+					<include>**/extensions.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -131,6 +145,53 @@
 					<goals>
 						<goal>package</goal>
 					</goals>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>fat-jar-for-mvn-home-lib-ext</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<shadedClassifierName>uber</shadedClassifierName>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<artifactSet>
+								<includes>
+									<include>io.earcam*:*</include>
+								</includes>
+							</artifactSet>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-extension-xml</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<artifacts>
+						<artifact>
+							<file>${project.build.testOutputDirectory}/extensions.xml</file>
+							<type>xml</type>
+							<classifier>extensions</classifier>
+						</artifact>
+					</artifacts>
 				</configuration>
 			</plugin>
 		</plugins>

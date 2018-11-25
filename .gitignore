@@ -2,4 +2,5 @@ target/
 .settings/
 .project
 .classpath
-
+*.ramdisk/dependency-reduced-pom.xml
+.io.earcam.utilitarian.site.sitemap.index.list

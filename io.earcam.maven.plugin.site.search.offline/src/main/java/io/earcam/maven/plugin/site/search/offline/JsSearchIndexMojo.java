@@ -18,6 +18,8 @@
  */
 package io.earcam.maven.plugin.site.search.offline;
 
+import static io.earcam.utilitarian.site.search.offline.Resources.PROPERTY_USE_SCRIPT_ENGINE;
+
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,6 +92,7 @@ public class JsSearchIndexMojo extends AbstractMojo {
 			LOG.warn("search index - skipping execution, as configured");
 			return;
 		}
+		workaroundForMavenVersusJdk9AndNashorn();
 		validate();
 
 		if(useDefaultConfiguration) {
@@ -98,6 +101,21 @@ public class JsSearchIndexMojo extends AbstractMojo {
 		}
 		JsSearchLifecycleParticipant.indexer(indexer);
 		JsSearchLifecycleParticipant.addDocuments(crawler.build().documents());
+	}
+
+
+	/**
+	 * Workaround for Maven vs JDK>=9 issue https://issues.apache.org/jira/browse/MNG-6275
+	 * 
+	 * Where Nashorn cannot be loaded via SPI (had previously tried a zero-code
+	 * workaround of defining {@code META-INF/services/javax.script.ScriptEngineFactory}
+	 * in this module - but that wasn't picked up).
+	 * 
+	 * It's public as we need to call it in the verify.groovy integration tests
+	 */
+	public static void workaroundForMavenVersusJdk9AndNashorn()
+	{
+		System.setProperty(PROPERTY_USE_SCRIPT_ENGINE, "jdk.nashorn.api.scripting.NashornScriptEngineFactory");
 	}
 
 

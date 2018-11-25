@@ -1,18 +1,10 @@
----
-#
-# Not a huge fan of YAML, just use https://www.json2yaml.com/  and  https://www.json2yaml.com/convert-yaml-to-json
-#
-# This CI build is rather 'busy' ATM;  
-#   Running mvn site just to create Jacoco XML reports for codecov.io
-#   Running mvn analyse profile for sonarcloud.io
-#
 language: java
 jdk: oraclejdk8
 sudo: false
 cache:
   directories:
   - "$HOME/.m2"
-  - "$HOME/apache-maven-3.5.4"
+  - "$HOME/apache-maven-3.6.0"
   - ""
 addons:
   apt:
@@ -25,12 +17,14 @@ addons:
 before_install:
 - sudo add-apt-repository ppa:linuxuprising/java -y
 - sudo apt-get update -q
-- sudo apt-get install oracle-java9-installer oracle-java10-installer -y
+- echo debconf shared/accepted-oracle-license-v1-2 select true | sudo debconf-set-selections
+- echo debconf shared/accepted-oracle-license-v1-2 seen true | sudo debconf-set-selections
+- sudo apt-get install oracle-java11-installer -y
 - export JAVA_8_HOME=/usr/lib/jvm/java-8-oracle
 - export JAVA_HOME=${JAVA_8_HOME}
 - mkdir -p $HOME/.m2
-- export M2_HOME=$HOME/apache-maven-3.5.4
-- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz | tar zxf - -C $HOME; fi
+- export M2_HOME=$HOME/apache-maven-3.6.0
+- if [ ! -d $M2_HOME/bin ]; then curl https://archive.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz | tar zxf - -C $HOME; fi
 - export PATH=$M2_HOME/bin:$PATH
 install:
 - chmod go-rwx -R $HOME/.m2
@@ -40,7 +34,7 @@ before_script:
 - mvn -v
 script:
 - export MAVEN_OPTS=-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,sonar
-- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P jdk-oracle,analyse,report,site
-- mvn --batch-mode --settings $HOME/ci-settings.xml org.eluder.coveralls:coveralls-maven-plugin:report
+- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P '!strict,jdk-oracle,analyse,report,sonar'
+- mvn --batch-mode --settings $HOME/ci-settings.xml -U -P '!strict,jdk-oracle,analyse,report,site'
+- mvn --batch-mode --settings $HOME/ci-settings.xml -P '!strict'  org.eluder.coveralls:coveralls-maven-plugin:report
 after_success: bash <(curl -s https://codecov.io/bash)

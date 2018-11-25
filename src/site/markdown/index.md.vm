@@ -124,10 +124,10 @@
 
 <ul class="nav nav-list">
 	<li class="nav-header">Supported JVMs</li>
-	<li><a class="externalLink" href="https://www.azul.com/downloads/zulu/" title="Azul Zulu"><img src="https://img.shields.io/badge/Java_8--10-Azul_Zulu-2B60DE.svg" alt="Azul Zulu" /></a></li>
-	<li><a class="externalLink" href="https://www.oracle.com/technetwork/java/javase" title="Oracle Hotspot"><img src="https://img.shields.io/badge/Java_8--10-Oracle_Hotspot-red.svg" alt="Oracle Hotspot" /></a></li>
-	<li><a class="externalLink" href="http://openjdk.java.net/" title="OpenJDK"><img src="https://img.shields.io/badge/Java_8--10-OpenJDK-orange.svg" alt="OpenJDK" /></a></li>
-	<li><a class="externalLink" href="https://www.eclipse.org/openj9" title="IBM/Eclipse J9"><img src="https://img.shields.io/badge/Java_8--10-Eclipse_J9-660099.svg" alt="IBM/Eclipse J9" /></a></li>
+	<li><a class="externalLink" href="https://www.azul.com/downloads/zulu/" title="Azul Zulu"><img src="https://img.shields.io/badge/Java_8--11-Azul_Zulu-2B60DE.svg" alt="Azul Zulu" /></a></li>
+	<li><a class="externalLink" href="https://www.oracle.com/technetwork/java/javase" title="Oracle Hotspot"><img src="https://img.shields.io/badge/Java_8--11-Oracle_Hotspot-red.svg" alt="Oracle Hotspot" /></a></li>
+	<li><a class="externalLink" href="http://openjdk.java.net/" title="OpenJDK"><img src="https://img.shields.io/badge/Java_8--11-OpenJDK-orange.svg" alt="OpenJDK" /></a></li>
+	<li><a class="externalLink" href="https://www.eclipse.org/openj9" title="IBM/Eclipse J9"><img src="https://img.shields.io/badge/Java_8--11-Eclipse_J9-660099.svg" alt="IBM/Eclipse J9" /></a></li>
 </ul>
 
 <br/>

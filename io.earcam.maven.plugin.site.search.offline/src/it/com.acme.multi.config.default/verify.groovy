@@ -19,9 +19,10 @@
 import java.nio.file.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import io.earcam.utilitarian.site.search.offline.*;
+import io.earcam.maven.plugin.site.search.offline.JsSearchIndexMojo;
 
 try { 
-	
+	JsSearchIndexMojo.workaroundForMavenVersusJdk9AndNashorn();
 	// copy UI script - goal was executed
 	
 	Path index = basedir.toPath().resolve(Paths.get("target", "site", "search-data.json"));

@@ -41,8 +41,8 @@ import io.earcam.unexceptional.Exceptional;
  * <p>
  * Configuration is achieved with the following properties:
  * <ul>
- * <li><b>{@value #PROPERTY_DIRECTORY}</b> to define a base path for tmpfs</li>
- * <li><b>{@value #PROPERTY_SKIP}</b> to skip execution</li>
+ * <li><b>earcam.ramdisk.dir</b> to define a base path for tmpfs</li>
+ * <li><b>earcam.ramdisk.skip</b> to skip execution</li>
  * </ul>
  * </p>
  * 

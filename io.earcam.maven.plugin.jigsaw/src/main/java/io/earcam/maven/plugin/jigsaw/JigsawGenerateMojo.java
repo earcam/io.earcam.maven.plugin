@@ -179,7 +179,6 @@ public class JigsawGenerateMojo extends AbstractJigsawMojo {
 				.stream()
 				.map(Artifact::getFile)
 				.map(File::toPath)
-				.peek(f -> logDebug("Adding dependency module from path: {}", f))
 				.forEach(mapper::add);
 
 		return mapper;

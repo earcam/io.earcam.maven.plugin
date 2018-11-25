@@ -68,7 +68,7 @@ public class CleanUpMojo extends AbstractMojo {
 	private void delete(Path target)
 	{
 		Path destination = Exceptional.apply(Files::readSymbolicLink, target);
-		if(Files.exists(destination)) {
+		if(destination.toFile().exists()) {
 			Exceptional.accept(RecursiveFiles::delete, destination);
 			LOG.debug("{} deleted tmpfs destination {}", LOG_CATEGORY, destination);
 		}

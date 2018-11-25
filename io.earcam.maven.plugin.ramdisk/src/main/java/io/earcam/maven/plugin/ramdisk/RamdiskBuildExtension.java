@@ -161,23 +161,23 @@ public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 		String scrapeDeets = "META-INF/maven/io.earcam.maven.plugin/io.earcam.maven.plugin.ramdisk/plugin-help.xml";
 		String xml = new String(IoStreams.readAllBytes(getClass().getClassLoader().getResourceAsStream(scrapeDeets)), UTF_8);
 
-		Plugin plugin = new Plugin();
-		plugin.setGroupId(extractFromXml(xml, "<groupId>", "</groupId>"));
-		plugin.setArtifactId(extractFromXml(xml, "<artifactId>", "</artifactId>"));
-		plugin.setVersion(extractFromXml(xml, "<version>", "</version>"));
+		Plugin dynamicPlugin = new Plugin();
+		dynamicPlugin.setGroupId(extractFromXml(xml, "<groupId>", "</groupId>"));
+		dynamicPlugin.setArtifactId(extractFromXml(xml, "<artifactId>", "</artifactId>"));
+		dynamicPlugin.setVersion(extractFromXml(xml, "<version>", "</version>"));
 
 		PluginExecution exec = new PluginExecution();
 		exec.setId("post-clean");
-		exec.setGoals(Collections.singletonList("ramdisk"));
+		exec.setGoals(Collections.singletonList(NAME));
 		exec.setPhase("post-clean");
-		plugin.addExecution(exec);
+		dynamicPlugin.addExecution(exec);
 
 		exec = new PluginExecution();
 		exec.setId("validate");
-		exec.setGoals(Collections.singletonList("ramdisk"));
+		exec.setGoals(Collections.singletonList(NAME));
 		exec.setPhase("validate");
-		plugin.addExecution(exec);
-		return plugin;
+		dynamicPlugin.addExecution(exec);
+		return dynamicPlugin;
 	}
 
 

@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>io.earcam.maven.plugin</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.4</version>
 	<packaging>pom</packaging>
 
 	<description>A disparate assortment of maven plugins</description>
@@ -32,7 +32,7 @@
 		<connection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</connection>
 		<developerConnection>scm:git:ssh://git@bitbucket.org/${coordinate.username.project}.git</developerConnection>
 		<url>http://bitbucket.org/${coordinate.username.project}.git</url>
-		<tag>HEAD</tag>
+		<tag>v0.0.4</tag>
 	</scm>
 	<issueManagement>
 		<system>BitBucket</system>
@@ -617,9 +617,7 @@
 								<configuration>
 									<target>
 										<copy todir="${project.reporting.outputDirectory}/js/">
-											<fileset
-												dir="${project.build.directory}/unpacked/META-INF/resources/js/"
-												includes="ui.search.lunr.js" />
+											<fileset dir="${project.build.directory}/unpacked/META-INF/resources/js/" includes="ui.search.lunr.js" />
 										</copy>
 									</target>
 								</configuration>

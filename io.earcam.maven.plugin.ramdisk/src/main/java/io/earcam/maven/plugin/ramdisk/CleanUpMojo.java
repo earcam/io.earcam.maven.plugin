@@ -55,6 +55,7 @@ public class CleanUpMojo extends AbstractMojo {
 	public void execute()
 	{
 		project.getProperties().put(PROPERTY_SKIP, "true");
+		@SuppressWarnings("squid:S4797")
 		Path target = Paths.get(project.getBuild().getDirectory());
 		if(Files.isSymbolicLink(target)) {
 			delete(target);

@@ -84,11 +84,18 @@ public class NetlifyUploadLifecycleParticipant extends AbstractMavenLifecyclePar
 		Map<String, Path> baseDirs = projects.stream()
 				.collect(toMap(
 						this::uriPath,
-						p -> Paths.get(p.getModel().getReporting().getOutputDirectory())));
+						NetlifyUploadLifecycleParticipant::mapToReportingOutput));
 
 		debug("site.name: {}, baseDirs: {}", site.name(), baseDirs);
 
 		netlify.deployZip(site.name(), baseDirs);
+	}
+
+
+	@SuppressWarnings("squid:S4797")
+	private static Path mapToReportingOutput(MavenProject project)
+	{
+		return Paths.get(project.getModel().getReporting().getOutputDirectory());
 	}
 
 

@@ -70,6 +70,7 @@ public abstract class AbstractSitemapMojo extends AbstractMojo {
 	protected boolean skip;
 
 
+	@SuppressWarnings("squid:S4784")  // SonarQube - questionable in context
 	protected SitemapParameters parameters()
 	{
 		SitemapParameters parameters = new SitemapParameters(baseUrl, sourceDir.toPath(), targetDir.toPath());

@@ -37,6 +37,7 @@ public final class Export {
 	private String[] to = EMPTY;
 
 
+	@SuppressWarnings("squid:S4784")  // SonarQube - questionable in context
 	public Predicate<String> packages()
 	{
 		return Pattern.compile(getPackageRegex()).asPredicate();

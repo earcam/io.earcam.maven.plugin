@@ -52,6 +52,7 @@ import io.earcam.unexceptional.Exceptional;
 import io.earcam.utilitarian.io.IoStreams;
 import io.earcam.utilitarian.io.file.RecursiveFiles;
 
+@SuppressWarnings("squid:S4797")
 @Component(role = AbstractMavenLifecycleParticipant.class, hint = NAME, instantiationStrategy = "singleton")
 public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 
@@ -144,6 +145,8 @@ public class RamdiskBuildExtension extends AbstractMavenLifecycleParticipant {
 	private static String extractUid()
 	{
 		try {
+			// SonarQube should really consider constant args as explicit and therefore OK
+			@SuppressWarnings("squid:S4721")
 			Process process = new ProcessBuilder("/usr/bin/id", "-u", System.getProperty("user.name")).redirectErrorStream(true).start();
 
 			try(Scanner scanner = new Scanner(process.getInputStream(), defaultCharset().toString())) {

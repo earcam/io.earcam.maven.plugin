@@ -139,7 +139,7 @@ Set the property either cmdline `-D` or in the pom.xml's `<properties>`:
 Really only aimed at Linux/UNIX.
 
 Mac OSX users can create a ramdisk and then set this `ram://` FS via the base path property 
-(then further could be achieve global zero-conf with an always active profile in `~/.m2/settings.xml')
+(then further could be achieve global application with an always active profile in `~/.m2/settings.xml')
 
 Users of Windows could try with ubuntu-shell or consider something like [ImDisk](https://www.google.com/search?q=imdisk) (from a reputable source), 
 and then set the base path (see above).
@@ -150,4 +150,6 @@ and then set the base path (see above).
 <div>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/SY0nDM3NSd8?rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
 </div>
+
+<br/>
 

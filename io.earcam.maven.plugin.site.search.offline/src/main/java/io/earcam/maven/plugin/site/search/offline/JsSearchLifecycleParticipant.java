@@ -39,7 +39,7 @@ public class JsSearchLifecycleParticipant extends AbstractMavenLifecycleParticip
 	private static Indexer indexer;
 
 
-	synchronized static void indexer(Indexing indexing)
+	static synchronized void indexer(Indexing indexing)
 	{
 		if(JsSearchLifecycleParticipant.indexer == null) {
 			JsSearchLifecycleParticipant.indexer = indexing.build();

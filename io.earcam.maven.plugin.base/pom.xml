@@ -9,10 +9,10 @@
 	</parent>
 
 	<groupId>io.earcam.maven.plugin</groupId>
-	<artifactId>io.earcam.maven.plugin.jigsaw</artifactId>
-	<packaging>maven-plugin</packaging>
+	<artifactId>io.earcam.maven.plugin.base</artifactId>
+	<packaging>jar</packaging>
 
-	<description>minimal JPMS module generator</description>
+	<description>utility</description>
 	<url>${site.url}${earcam.project.name.short}</url>
 
 	<distributionManagement>
@@ -23,26 +23,15 @@
 	</distributionManagement>
 
 	<properties>
-		<earcam.project.name.short>jigsaw</earcam.project.name.short>
+		<earcam.project.name.short>base</earcam.project.name.short>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>io.earcam.maven.plugin</groupId>
-			<artifactId>io.earcam.maven.plugin.base</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.earcam.instrumental</groupId>
-			<artifactId>io.earcam.instrumental.module.jpms</artifactId>
-			<version>${version.instrumental}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>io.earcam.instrumental</groupId>
-			<artifactId>io.earcam.instrumental.archive.jpms</artifactId>
-			<version>${version.instrumental}</version>
+			<groupId>org.fusesource.jansi</groupId>
+			<artifactId>jansi</artifactId>
+			<version>1.17.1</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -124,30 +113,8 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.plexus</groupId>
-				<artifactId>plexus-component-metadata</artifactId>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-docck-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-invoker-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>io.earcam.instrumental</groupId>
-						<artifactId>io.earcam.instrumental.module.jpms</artifactId>
-						<version>${version.instrumental}</version>
-					</dependency>
-				</dependencies>
+				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

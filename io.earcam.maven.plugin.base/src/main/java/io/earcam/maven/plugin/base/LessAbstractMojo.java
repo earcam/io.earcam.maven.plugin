@@ -1,6 +1,6 @@
 /*-
  * #%L
- * io.earcam.maven.plugin.jigsaw
+ * io.earcam.maven.plugin.base
  * %%
  * Copyright (C) 2018 earcam
  * %%
@@ -16,7 +16,7 @@
  * </ul>
  * #L%
  */
-package io.earcam.maven.plugin.jigsaw;
+package io.earcam.maven.plugin.base;
 
 import java.util.function.BiConsumer;
 
@@ -24,10 +24,11 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.shared.utils.logging.MessageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class LessAbstractMojo extends AbstractMojo {
+public abstract class LessAbstractMojo extends AbstractMojo {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LessAbstractMojo.class);
 
@@ -43,12 +44,13 @@ abstract class LessAbstractMojo extends AbstractMojo {
 	@Parameter(property = "verbose", defaultValue = "false")
 	protected boolean verbose;
 
-	private final String logPrefix;
+	final String logPrefix;
 
 
 	protected LessAbstractMojo(String logIdentifierName)
 	{
-		this.logPrefix = '[' + logIdentifierName + "] ";
+		String preprefix = '[' + logIdentifierName + "] ";
+		this.logPrefix = MessageUtils.isColorEnabled() ? MessageUtils.buffer().strong(preprefix).toString() : preprefix;
 	}
 
 

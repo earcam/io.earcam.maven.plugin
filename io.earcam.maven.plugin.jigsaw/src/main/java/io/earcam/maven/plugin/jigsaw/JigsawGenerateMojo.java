@@ -160,7 +160,7 @@ public class JigsawGenerateMojo extends AbstractJigsawMojo {
 				.named(moduleName)
 				.versioned(moduleVersion)
 				.providingFromMetaInfServices(addMetaInfServices)
-				.autoRequiringJdkModules()
+				.autoRequiringJdkModules(jdkVersion)
 				.autoRequiring(mavenMapper());
 
 		uses.forEach(asJpmsModule::using);

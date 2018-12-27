@@ -22,6 +22,8 @@ import java.io.File;
 
 import org.apache.maven.plugins.annotations.Parameter;
 
+import io.earcam.maven.plugin.base.LessAbstractMojo;
+
 abstract class AbstractJigsawMojo extends LessAbstractMojo {
 
 	static final String CATEGORY = "jigsaw";
@@ -41,6 +43,22 @@ abstract class AbstractJigsawMojo extends LessAbstractMojo {
 	 */
 	@Parameter(property = "targetFile", defaultValue = "${project.build.outputDirectory}/module-info.class", required = true)
 	protected File targetFile;
+
+	/**
+	 * <p>
+	 * The JDK version to use (must be &ge; 9)
+	 * </p>
+	 * 
+	 * <p>
+	 * For <b>compilation</b> this will simply determine the module-info class file's major version number.
+	 * </p>
+	 * <p>
+	 * For <b>generation</b> this will determine the set of modules deemed available from the JDK, and
+	 * the module-info class file's major version number.
+	 * </p>
+	 */
+	@Parameter(property = "jdkVersion", required = true, defaultValue = "9")
+	protected int jdkVersion = 9;
 
 
 	protected AbstractJigsawMojo(String name)

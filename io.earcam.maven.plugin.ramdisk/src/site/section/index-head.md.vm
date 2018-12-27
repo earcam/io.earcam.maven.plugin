@@ -15,9 +15,11 @@ Switch Maven build directories to ramdisk/tmpfs (such that all generated files a
 * Save SSD/HDD from ephemeral churn
 
 On local desktop (with projects on SATA3 SSD), I observe a 20-30% reduction in build time 
-(with/out 
-[parallel build](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) 
+(with/out [parallel build](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) 
 settings).
+It won't help on CI environments like Travis (which likely already uses something like unionfs/overlayfs), or 
+when running on Docker with ephemeral volumes.  Conversely, for bare-metal or VMs the benefit is likely higher
+than the ~25% reduction seen locally (especially when considering nfs and SANs).
 
 
 <p>&nbsp;</p>

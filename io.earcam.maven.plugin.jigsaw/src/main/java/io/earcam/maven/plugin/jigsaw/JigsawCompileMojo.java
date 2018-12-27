@@ -77,7 +77,7 @@ public class JigsawCompileMojo extends AbstractJigsawMojo {
 
 		ModuleInfo moduleInfo = ModuleInfoParser.parse(Exceptional.apply(FileInputStream::new, sourceFile), Charset.forName(charset));
 
-		Exceptional.run(() -> Files.write(targetFile.toPath(), moduleInfo.toBytecode(), TRUNCATE_EXISTING, CREATE, WRITE));
+		Exceptional.run(() -> Files.write(targetFile.toPath(), moduleInfo.toBytecode(jdkVersion), TRUNCATE_EXISTING, CREATE, WRITE));
 	}
 
 

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+  #%L
+  io.earcam.maven.plugin.jlinkage
+  %%
+  Copyright (C) 2018 earcam
+  %%
+  SPDX-License-Identifier: (BSD-3-Clause OR EPL-1.0 OR Apache-2.0 OR MIT)
+  
+  You <b>must</b> choose to accept, in full - any individual or combination of 
+  the following licenses:
+  <ul>
+  	<li><a href="https://opensource.org/licenses/BSD-3-Clause">BSD-3-Clause</a></li>
+  	<li><a href="https://www.eclipse.org/legal/epl-v10.html">EPL-1.0</a></li>
+  	<li><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache-2.0</a></li>
+  	<li><a href="https://opensource.org/licenses/MIT">MIT</a></li>
+  </ul>
+  #L%
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.acme</groupId>
+	<artifactId>generate.simple</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.8.0-beta2</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- EARCAM_SNIPPET_BEGIN: example-simple -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>11</version>
+							<vendor>oracle</vendor>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>io.earcam.maven.plugin</groupId>
+				<artifactId>io.earcam.maven.plugin.jlinkage</artifactId>
+				<version>${version.this.plugin}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jlink</goal>
+						</goals>
+						<configuration>
+							<compress>ZIP</compress>
+							<excludeHeaderFiles>true</excludeHeaderFiles>
+							<stripDebug>true</stripDebug>
+							<outputName>jvm</outputName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- EARCAM_SNIPPET_END: example-simple -->
+		</plugins>
+	</build>
+</project>

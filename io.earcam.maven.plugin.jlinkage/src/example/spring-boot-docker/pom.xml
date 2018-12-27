@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.springframework</groupId>
+    <artifactId>gs-spring-boot-docker-reworked</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+    <name>Spring Boot Docker</name>
+    <description>Getting started with Spring Boot and Docker</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.1.RELEASE</version>
+        <relativePath />
+    </parent>
+
+    <properties>
+        <docker.image.prefix>springio</docker.image.prefix>
+        <java.version>1.8</java.version>
+        
+        <version.alpine>3.8</version.alpine>
+    </properties>
+
+    <build>
+        <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>11</version>
+							<vendor>oracle</vendor>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
+
+        	<plugin>
+				<groupId>io.earcam.maven.plugin</groupId>
+				<artifactId>io.earcam.maven.plugin.jlinkage</artifactId>
+       			<version>0.0.5-SNAPSHOT</version>
+       			<executions>
+       				<execution>
+       					<goals>
+       						<goal>jlink</goal>
+       					</goals>
+       					<configuration>
+							<toolchainJdkVersion>11</toolchainJdkVersion>
+							<toolchainJdkVendor>oracle</toolchainJdkVendor>
+       						<compress>ZIP</compress>
+       						<excludeHeaderFiles>true</excludeHeaderFiles>
+       						<stripDebug>true</stripDebug>
+       						<outputName>jvm</outputName>
+       					</configuration>
+       				</execution>
+       			</executions>
+        	</plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                	<skip>true</skip>
+                </configuration>
+            </plugin>
+            
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.28.0</version>
+				<configuration>
+					<images>
+						<image>
+							<alias>${project.artifactId}</alias>
+							<name>${docker.image.prefix}/${project.artifactId}:${project.version}</name>
+							<build>
+								<from>earcam/alpine.glibc:0.0.1-SNAPSHOT</from>
+								<maintainer>${project.developers[0].name} ${project.developers[0].url}</maintainer>
+								<tags>
+									<!-- <tag>latest</tag> -->
+									<tag>${project.version}</tag>
+								</tags>
+								
+								<ports>
+									<port>8080</port>
+								</ports>
+
+								<env>
+									<JAVA_HOME>/opt/jvm</JAVA_HOME>
+									<PATH>/opt/jvm/bin:$PATH</PATH>
+								</env>
+
+								<assembly>
+									<targetDir>/opt</targetDir>
+									<inline>
+										<fileSet>
+											<directory>${project.build.directory}/jvm</directory>
+											<outputDirectory>jvm</outputDirectory>
+										</fileSet>
+										<dependencySets>
+											<dependencySet>
+												<useProjectArtifact>true</useProjectArtifact>
+												<useTransitiveDependencies>true</useTransitiveDependencies>
+												<unpack>false</unpack>
+												<outputDirectory>lib</outputDirectory>
+											</dependencySet>
+										</dependencySets>
+										
+										<!-- try not to use Sprung fat-jar
+										<fileSet>
+											<directory>${project.build.directory}</directory>
+											<outputDirectory>.</outputDirectory>
+											<include>${project.artifactId}-${project.version}.jar</include>
+										</fileSet>
+										-->
+									</inline>
+								</assembly>
+								
+								<cmd>java -cp '/opt/lib/*' hello.Application</cmd>
+								<!-- try not to use Sprung fat-jar
+								<cmd>java -jar /opt/${project.artifactId}-${project.version}.jar</cmd>
+								-->
+							</build>
+						</image>
+					</images>
+					<verbose>true</verbose>
+				</configuration>
+				<executions>
+					<execution>
+						<id>build</id>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+       </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

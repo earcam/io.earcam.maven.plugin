@@ -1,6 +1,6 @@
 /*-
  * #%L
- * io.earcam.maven.plugin.jigsaw
+ * io.earcam.maven.plugin.base
  * %%
  * Copyright (C) 2018 earcam
  * %%
@@ -16,16 +16,17 @@
  * </ul>
  * #L%
  */
-package io.earcam.maven.plugin.jigsaw;
+package io.earcam.maven.plugin.base;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.shared.utils.logging.MessageUtils;
 import org.junit.Test;
 
-import io.earcam.maven.plugin.jigsaw.LessAbstractMojo;
+import io.earcam.maven.plugin.base.LessAbstractMojo;
 
 public class LessAbstractMojoTest {
 
@@ -119,5 +120,26 @@ public class LessAbstractMojoTest {
 		mojo.execute();
 
 		assertThat(mojo.lastInfoMessage, endsWith(LogDummyMojo.MESSAGE));
+	}
+
+
+	@Test
+	public void whenJansiIsEnableThenLogPrefixIsColourized() throws Exception
+	{
+		MessageUtils.setColorEnabled(true);
+		LogDummyMojo mojo = new LogDummyMojo();
+
+		assertThat(mojo.logPrefix, containsString("[1m[log] "));
+	}
+
+
+	@Test
+	public void whenJansiNotEnableThenLogPrefixNotColourized() throws Exception
+	{
+		MessageUtils.setColorEnabled(false);
+		LogDummyMojo mojo = new LogDummyMojo();
+
+		assertThat(mojo.logPrefix, is(equalTo("[log] ")));
+		MessageUtils.setColorEnabled(true);
 	}
 }

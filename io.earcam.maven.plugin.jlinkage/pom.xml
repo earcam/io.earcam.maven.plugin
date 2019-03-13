@@ -186,7 +186,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>it/spring-boot-docker/**</exclude>
+						<exclude>example/spring-boot-docker/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
